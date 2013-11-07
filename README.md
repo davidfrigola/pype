@@ -13,4 +13,5 @@ Module Dependencies
 ===================
 
  * pip install feedparser
- * pip install BeautifulSoup
+ * pip install BeautifulSoup4
+ * pip install requests
