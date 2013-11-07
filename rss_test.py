@@ -9,4 +9,4 @@ base.setValue("http://www.medscape.com/cx/rssfeeds/2667.xml")
 result = rssprocessor.process(base)
 
 for e in result:
-    print str(e.getValue()) + str(e.getMetadataValue("parent"))
+    print str(e.getValue()) +" <<<<< " +  str(e.getMetadataValue("parent").getValue())

@@ -1,3 +1,6 @@
+import logging
+
+logger = logging.getLogger("pype_core")
 
 class AbstractProcessor:
 	""" Abstract Processor Base Class
@@ -28,10 +31,15 @@ class AbstractListProcessor(AbstractProcessor):
 		Uses the process method for each element in the list.
 	"""
 
-	def processList(_self,items):
+	def processList(self,items):
 		result = []
 		for item in items:
-			result = result + _self.process(self,item)
+			processedItem = self.process(self,item)
+			if processedItem is not None:
+				result = result + processedItem
+			else:
+				logger.warning("Processed item %s returns None",str(item))
+
 		return result
 
 
