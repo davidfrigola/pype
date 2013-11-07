@@ -20,7 +20,7 @@ class RssProcessor(AbstractListProcessor):
 		logger.debug("Set field as %s",_self.field)
 
 	def process(_self,item):
-		""" Process a RSS item , retrieven the configured field as a string
+		""" Process a RSS item , retrieving the configured field as a string
 
 			- item should contain a valid RSS url
 		"""
