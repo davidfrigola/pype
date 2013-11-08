@@ -36,7 +36,7 @@ class AbstractListProcessor(AbstractProcessor):
 	def processList(self,items):
 		result = []
 		for item in items:
-			processedItem = self.process(self,item)
+			processedItem = self.process(item)
 			if processedItem is not None:
 				result = result + processedItem
 			else:

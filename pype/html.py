@@ -49,7 +49,7 @@ class BSProcessor(HtmlProcessor):
             return None
         else:
 
-            foundItems = self.find(item.getValue(),item)
+            foundItems = self.internalProcess(item.getValue(),item)
             if foundItems is not None:
                 result.extend(foundItems)
             else:
@@ -59,11 +59,12 @@ class BSProcessor(HtmlProcessor):
 
         return result
 
-    """ FIND inside the bsObject the configured 'find' expression (BS one) """
-    def find(self,bsObject,item):
+    """ Process inside the bsObject  (BS one) """
+    def internalProcess(self,bsObject,item):
 
-        if self.config["find"] is not None:
-            result = []
+        result = []
+
+        if "find" in self.config and self.config["find"] is not None:
             findConfigDict = self.config["find"]
             # Process all find config definitions
             for findKey in findConfigDict:
@@ -78,6 +79,21 @@ class BSProcessor(HtmlProcessor):
                     foundItem.setValue(foundElement)
                     result.append(foundItem)
 
-            return result
+        elif "get" in self.config and self.config["get"] is not None:
+
+            getConfigDict = self.config["get"]
+            for getKey in getConfigDict:
+
+                if getKey is not None:
+
+                    getItem = BaseItem({"parent":item})
+                    getItem.setValue(bsObject.get(getKey))
+                    result.append(getItem)
+
+                else:
+                    raise "Error : should provide something to GET"
+
         else:
-            return None
+            result = None
+
+        return result
