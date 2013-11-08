@@ -1,5 +1,7 @@
 import logging
 
+from model import *
+
 logger = logging.getLogger("pype_core")
 
 class AbstractProcessor:
@@ -43,29 +45,3 @@ class AbstractListProcessor(AbstractProcessor):
 		return result
 
 
-class AbstractItem:
-	""" Abstract item to process """
-	metadata = {}
-	value = None
-	def __init__(self,metadata):
-		pass
-
-
-	def getMetadataValue(self,key):
-		pass
-
-
-
-class BaseItem(AbstractItem):
-	""" Base item """
-	def __init__(self,metadata):
-		self.metadata = metadata
-
-	def setValue(self,value):
-		self.value = value
-
-	def getValue(self):
-		return self.value
-
-	def getMetadataValue(self,key):
-		return self.metadata[key];

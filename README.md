@@ -12,6 +12,6 @@ Just a small framework to help me learn Python and usefull for my own purposes.
 Module Dependencies
 ===================
 
- * pip install feedparser
- * pip install BeautifulSoup4
- * pip install requests
+ * feedparser : for rss processors
+ * BeautifulSoup4 : for HTML and BS processors
+ * requests : for HTML processors
