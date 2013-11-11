@@ -1,4 +1,6 @@
 from core import AbstractListProcessor,AbstractProcessor
+import random
+from time import sleep
 
 # Some global constants
 # The processor chain config key
@@ -17,6 +19,7 @@ class ChainProcessor(AbstractListProcessor):
 
 
     config = {}
+
     def __init__(self,config):
         self.config = config
 
@@ -94,3 +97,82 @@ class ParalelProcessor(AbstractListProcessor):
                 pass
 
         return result
+
+
+
+# The conditions list
+CONDITIONS_LIST = "conditionslist"
+# The condition evaluation
+CONDITION_EVALUATION = "conditionevaluation"
+
+""" Processor with some conditions
+    Only items that accomplish the conditions will be return
+"""
+class ConditionalProcessor(AbstractListProcessor):
+
+    config = {}
+
+    def __init__(self,config):
+        self.config = config
+        if CONDITIONS_LIST not in config or config[CONDITIONS_LIST] is None:
+            raise "Bad configuration : must provide at least one condition"
+        else:
+            # TODO Check that all conditions are instance of AbstractCondition
+            pass
+
+    def process(self,item):
+        # TODO Implement
+        return [item]
+        pass
+
+
+
+
+""" Base class for conditions """
+class AbstractCondition:
+
+    config = {}
+
+    def __init__(self,config):
+        self.config = config
+
+
+    def evaluate(self,item):
+        ## Not a real condition
+        return true
+
+PROCESS_SLEEP_MIN = "sleepmin"
+PROCESS_SLEEP_MAX = "sleepmax"
+PROCESS_SLEEP_RND = "sleeprandom"
+""" Sleeps a random amount of time (seconds) for each item processed
+    Uses sleepmin and sleepmax for the amount of time to sleep.
+    Randomly, for each
+    And does just it, returning the same element.
+"""
+class SleepProcessor(AbstractListProcessor):
+
+    __time_min = 0
+    __time_max = 0
+    __time_random = False;
+
+
+    def __init__(self,config):
+        self.config = config
+        self.__time_min = config[PROCESS_SLEEP_MIN]
+        self.__time_max = config[PROCESS_SLEEP_MAX]
+        self.__time_random = config[PROCESS_SLEEP_RND]
+
+
+    def process(self,item):
+        self.__sleep()
+        return [item]
+
+
+    def __sleep(self):
+        time = self.__time_min
+        if self.__time_random:
+            # sleep randomly
+            time =random.uniform(self.__time_min,self.__time_max)
+
+        print "Sleeping %s sec" + str(time)
+        sleep(time)

@@ -11,7 +11,7 @@ addBaseUrlModifier = PrependStringModifier({"prependvalue":"http://bandaancha.eu
 
 modifierprocessor = ModifierProcessor({MODIFIERS_LIST:[addBaseUrlModifier]})
 
-chain = ChainProcessor({PROCESSOR_CHAIN:[htmlprocessor,h2processor,aprocessor,modifierprocessor]})
+chain = ChainProcessor({PROCESSORS_LIST:[htmlprocessor,h2processor,aprocessor,modifierprocessor]})
 
 base = BaseItem(None)
 base.setValue("http://bandaancha.eu/")
@@ -24,3 +24,12 @@ for e in result:
     else:
         print str(e.getValue()) +" <<<<< " +  str(e.getMetadataValue("parent").getValue())
 
+chainSleep = ChainProcessor({PROCESSORS_LIST:[SleepProcessor({PROCESS_SLEEP_MIN:1,PROCESS_SLEEP_MAX:10,PROCESS_SLEEP_RND:True}),htmlprocessor]})
+
+result = chainSleep.processList(result)
+
+for e in result:
+    if e is None:
+        print "NONE"
+    else:
+        print str(e.getValue()) +" <<<<< " +  str(e.getMetadataValue("parent").getValue())
