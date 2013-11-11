@@ -105,6 +105,11 @@ CONDITIONS_LIST = "conditionslist"
 # The condition evaluation
 CONDITION_EVALUATION = "conditionevaluation"
 
+# CONDITION EVALUATION TYPES
+CONDITION_EVALUATION_MUSTALL = "mustall"
+CONDITION_EVALUATION_NOTALL = "notall"
+CONDITION_EVALUATION_ATLEASTONE = "atleastone"
+
 """ Processor with some conditions
     Only items that accomplish the conditions will be return
 """
@@ -121,11 +126,47 @@ class ConditionalProcessor(AbstractListProcessor):
             pass
 
     def process(self,item):
-        # TODO Implement
-        return [item]
-        pass
 
+        if self.__evaluateConditions(item):
+            return [item]
+        return []
 
+    def __evaluateConditions(self,item):
+        #Evaluate conditions depending on the condition evaluation type
+        if self.config[CONDITION_EVALUATION]==CONDITION_EVALUATION_MUSTALL:
+            return self.__evaluateMustAll(item)
+        elif self.config[CONDITION_EVALUATION]==CONDITION_EVALUATION_NOTALL:
+            return self.__evaluateNotAll(item)
+        elif self.config[CONDITION_EVALUATION]==CONDITION_EVALUATION_ATLEASTONE:
+            return self.__evaluateAtLeastOne(item)
+        else:
+            return True
+
+    def __evaluateMustAll(self,item):
+
+        for c in self.config[CONDITIONS_LIST]:
+            if not c.evaluate(item):
+                # DBG condition c not passed
+                #print "Condition %s not passed",str(c)
+                return False
+        return True
+
+    def __evaluateNotAll(self,item):
+
+        for c in self.config[CONDITIONS_LIST]:
+            if c.evaluate(item):
+                # DBG condition c not passed
+                # print "Condition %s not passed",str(c)
+                return False
+        return True
+
+    def __evaluateAtLeastOne(self,item):
+        for c in self.config[CONDITIONS_LIST]:
+            if c.evaluate(item):
+                return True
+        # DBG no condition passed for the item
+        print "No condition passed"
+        return False
 
 
 """ Base class for conditions """
