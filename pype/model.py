@@ -35,3 +35,6 @@ class BaseItem(AbstractItem):
 
     def getMetadataValue(self,key):
         return self.metadata[key];
+
+    def setMetadataValue(self,key,value):
+        self.metadata[key] = value
