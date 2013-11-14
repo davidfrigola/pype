@@ -72,7 +72,7 @@ class BSProcessor(HtmlProcessor):
                 if findConfigDict[findKey] is not None:
                      foundElements = bsObject.find_all(findKey, findConfigDict[findKey])
                 else:
-                    foundElements = bsObject.find(findKey)
+                    foundElements = bsObject.findAll(findKey)
 
                 for foundElement in foundElements:
                     foundItem = BaseItem({"parent":item})
