@@ -19,7 +19,8 @@ class BaseItem(AbstractItem):
 
 
     def __init__(self,metadata):
-        self.metadata = metadata
+        if not metadata is None:
+            self.metadata = metadata
 
     def setValue(self,value):
         self.value = value
@@ -34,7 +35,12 @@ class BaseItem(AbstractItem):
         return self.metadata["parent"]
 
     def getMetadataValue(self,key):
-        return self.metadata[key];
+        if (not self.metadata is None) and key in self.metadata:
+            return self.metadata[key];
+        return None
 
     def setMetadataValue(self,key,value):
+
+        if self.metadata is None:
+            self.metadata = {}
         self.metadata[key] = value
