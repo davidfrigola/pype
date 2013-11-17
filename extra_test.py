@@ -2,6 +2,9 @@
 from pype.html import *
 from pype.extra import *
 from pype.modifiers import *
+import logging
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
+
 
 htmlprocessor = HtmlProcessor({"find":{"h2":{"class":"title"}}})
 h2processor = BSProcessor({"find":{"a":{"itemprop":"url"}}})

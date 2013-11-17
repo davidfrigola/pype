@@ -2,6 +2,9 @@
 # Example : http://bandaancha.eu/
 from pype.html import *
 
+import logging
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
+
 htmlprocessor = HtmlProcessor({"find":{"h2":{"class":"title"}}})
 h2processor = BSProcessor({"find":{"a":{"itemprop":"url"}}})
 

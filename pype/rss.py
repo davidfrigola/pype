@@ -1,7 +1,7 @@
 import feedparser
 import logging
 
-logger = logging.getLogger("pype_rss")
+logger = logging.getLogger("pype.rss")
 
 from core import *
 

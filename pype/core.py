@@ -2,7 +2,7 @@ import logging
 
 from model import *
 
-logger = logging.getLogger("pype_core")
+logger = logging.getLogger("pype")
 
 class AbstractProcessor:
 	""" Abstract Processor Base Class
@@ -40,7 +40,7 @@ class AbstractListProcessor(AbstractProcessor):
 			if processedItem is not None:
 				result = result + processedItem
 			else:
-				logger.warning("Processed item %s returns None",str(item))
+				logger.warning("Processed item %s returns [] empty array",str(item))
 
 		return result
 

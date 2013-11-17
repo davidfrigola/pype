@@ -1,5 +1,7 @@
 from pype.modifiers import *
 from pype.extra import *
+import logging
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
 base = BaseItem({"parent":None})
 base.setValue("This is my value")

@@ -6,7 +6,11 @@ import sys
 
 from core import *
 
-logger = logging.getLogger("pype_html")
+logger = logging.getLogger("pype.html")
+
+
+""" Config constants for HtmlProcessor """
+FROM_TEXT = "fromtext"
 
 class HtmlProcessor(AbstractListProcessor):
 
@@ -17,12 +21,19 @@ class HtmlProcessor(AbstractListProcessor):
 
 
 
+
+
     def process(self,item):
         """ Process a HTML item , retrieving whatever config stands
 
             - item should contain a valid web url
         """
-        htmlBS = BeautifulSoup(requests.get(item.getValue()).text)
+        if FROM_TEXT  in self.config and self.config[FROM_TEXT]:
+            logger.debug("Using text to obtain BS object")
+            htmlBS = BeautifulSoup(item.getValue())
+        else:
+            logger.debug("Request to "+item.getValue())
+            htmlBS = BeautifulSoup(requests.get(item.getValue()).text)
         bsHtmlItem = BaseItem({"parent":item})
         bsHtmlItem.setValue(htmlBS)
 
@@ -46,13 +57,16 @@ class BSProcessor(HtmlProcessor):
         result = []
 
         if item is None:
+            logger.info("None item : returning None")
             return None
         else:
 
             foundItems = self.internalProcess(item.getValue(),item)
             if foundItems is not None:
+                logger.info("Found "+ str(len(foundItems))+" item(s)")
                 result.extend(foundItems)
             else:
+                logger.warn("No items found")
                 resultItem = BaseItem({"parent":item})
                 resultItem.setValue(htmlBS)
                 result.append(resultItem)
@@ -65,6 +79,7 @@ class BSProcessor(HtmlProcessor):
         result = []
 
         if "find" in self.config and self.config["find"] is not None:
+            logger.debug("Processing 'find' config " + str(self.config["find"]))
             findConfigDict = self.config["find"]
             # Process all find config definitions
             for findKey in findConfigDict:
@@ -81,6 +96,7 @@ class BSProcessor(HtmlProcessor):
 
         elif "get" in self.config and self.config["get"] is not None:
 
+            logger.debug("Processing 'get' config " + str(self.config["get"]))
             getConfigDict = self.config["get"]
             for getKey in getConfigDict:
 

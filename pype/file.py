@@ -1,6 +1,9 @@
 from core import *
 import os
 import urllib2
+import logging
+
+logger = logging.getLogger("pype.file")
 
 # Folder in wich store files
 FILE_FOLDER = "filefolder"
@@ -28,12 +31,16 @@ class FileDownloader(AbstractListProcessor):
             raise "You must specify the metadata FLAG"
 
     def process(self,item):
-        file = None # TODO download file
+        file = None
         downloadFileHandler = urllib2.urlopen(item.getValue())
         file_name = item.getValue().split('/')[-1]
         directory = self.__config[FILE_FOLDER] + self.__getFileSubfolder(item)
+
         if not os.path.exists(directory):
             os.makedirs(directory)
+
+        log.info("Downloading file to "+directory+file_name)
+
         file = open(directory + file_name,'wb')
         file.write(downloadFileHandler.read())
         file.close()

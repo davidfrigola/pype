@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger("pype.model")
+
 
 """ Abstract Item """
 class AbstractItem:
@@ -37,6 +40,7 @@ class BaseItem(AbstractItem):
     def getMetadataValue(self,key):
         if (not self.metadata is None) and key in self.metadata:
             return self.metadata[key];
+        logger.warn("Not found "+str(key)+" in metadata")
         return None
 
     def setMetadataValue(self,key,value):

@@ -1,6 +1,9 @@
 from core import AbstractListProcessor,AbstractProcessor
 import random
 from time import sleep
+import logging
+
+logger = logging.getLogger("pype.extra")
 
 # Some global constants
 # The processor chain config key
@@ -37,8 +40,9 @@ class ChainProcessor(AbstractListProcessor):
             for p in self.config[PROCESSORS_LIST]:
                 if not isinstance(p,AbstractProcessor):
                     raise "Set a non-processor element in the processor chain config " + str(p)
+                logger.info("Starting processor "+str(p)+"with "+str(len(items))+" items")
                 items = p.processList(items)
-
+                logger.info("Obtained "+str(len(items))+" items")
             return items
         else:
             raise "No processor chain defined. Set it in the config"
@@ -215,5 +219,5 @@ class SleepProcessor(AbstractListProcessor):
             # sleep randomly
             time =random.uniform(self.__time_min,self.__time_max)
 
-        print "Sleeping %s sec" + str(time)
+        logger.info("Sleeping seconds : " +  str(time))
         sleep(time)
