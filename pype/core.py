@@ -2,7 +2,7 @@ import logging
 
 from model import *
 
-logger = logging.getLogger("pype_core")
+logger = logging.getLogger("pype.core")
 
 class AbstractProcessor:
 	""" Abstract Processor Base Class

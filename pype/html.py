@@ -6,7 +6,7 @@ import sys
 
 from core import *
 
-logger = logging.getLogger("pype_html")
+logger = logging.getLogger("pype.html")
 
 class HtmlProcessor(AbstractListProcessor):
 
