@@ -26,8 +26,10 @@ class FileDownloader(AbstractListProcessor):
         self.__config = config;
         # Validate folder
         if not FILE_FOLDER in config:
+            logger.error("You must specify a file folder")
             raise "You must specify a file folder"
         if not FILE_ADD_AS_METADATA in config:
+            logger.error("You must specify the metadata FLAG")
             raise "You must specify the metadata FLAG"
 
     def process(self,item):
@@ -37,6 +39,7 @@ class FileDownloader(AbstractListProcessor):
         directory = self.__config[FILE_FOLDER] + self.__getFileSubfolder(item)
 
         if not os.path.exists(directory):
+            logger.info("Creating folder "+directory)
             os.makedirs(directory)
 
         log.info("Downloading file to "+directory+file_name)
@@ -59,5 +62,6 @@ class FileDownloader(AbstractListProcessor):
         if not item.getMetadataValue(FILE_SUBFOLDER_METADATA) is None:
             return item.getMetadataValue(FILE_SUBFOLDER_METADATA)+"/"
         else:
+            logger.debug("No subfolder configured")
             return ""
 

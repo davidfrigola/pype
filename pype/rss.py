@@ -44,7 +44,7 @@ class RssProcessor(AbstractListProcessor):
 				return None
 
 			if resultEntry is not None:
-				# [DBG] print "Entry value " + str(resultEntry.getValue())
+				logger.debug("Entry value for '" + _self.field + "'= " + str(resultEntry.getValue()))
 				result.append(resultEntry)
 		logger.debug("Returning %s elements",str(len(result)))
 		return result

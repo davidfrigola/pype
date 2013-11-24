@@ -86,6 +86,7 @@ class ParalelProcessor(AbstractListProcessor):
     def __init__(self,config):
         self.config = config
         if (not PROCESSORS_LIST in self.config) or (self.config[PROCESSORS_LIST] is None):
+            loggger.error("Bad configuration : need a processor list")
             raise "Bad configuration : need a processors list"
 
 
@@ -97,8 +98,7 @@ class ParalelProcessor(AbstractListProcessor):
             if pResult is not None:
                 result.extend(pResult)
             else:
-                # WARNING : TODO : logger?
-                pass
+                logger.warning("Result = None using processor : "+str(processor))
 
         return result
 
@@ -152,6 +152,7 @@ class ConditionalProcessor(AbstractListProcessor):
             if not c.evaluate(item):
                 # DBG condition c not passed
                 #print "Condition %s not passed",str(c)
+                logger.info("Not passed condition "+str(c))
                 return False
         return True
 
@@ -159,7 +160,6 @@ class ConditionalProcessor(AbstractListProcessor):
 
         for c in self.config[CONDITIONS_LIST]:
             if c.evaluate(item):
-                # DBG condition c not passed
                 # print "Condition %s not passed",str(c)
                 return False
         return True

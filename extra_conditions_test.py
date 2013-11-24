@@ -4,6 +4,9 @@ from pype.extra_conditions import *
 from pype.core import *
 from pype.extra import *
 
+import logging
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
+
 import re
 
 base = BaseItem(None)
