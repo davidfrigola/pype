@@ -69,4 +69,4 @@ class TransmissionAddMagnetLinkProcessor(AbstractListProcessor):
 
     def __checkConfiguration(self,config):
         ## TODO Must be implemented (Issue #4)
-        return true
+        return (not config is None) and (TRANSMISSION_IP in config) and (TRANSMISSION_PORT in config) and (TRANSMISSION_USER in config) and (TRANSMISSION_PASSWORD in config)
