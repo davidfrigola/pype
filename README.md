@@ -3,6 +3,8 @@ pype
 
 Python pipe
 
+<img src="https://travis-ci.org/davidfrigola/pype.png" data-bindattr-28="28" title="Build Status Images">
+
 Abstract
 ========
 
