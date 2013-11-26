@@ -20,3 +20,5 @@ Module Dependencies
  * feedparser : for rss processors
  * BeautifulSoup4 : for HTML and BS processors
  * requests : for HTML processors
+ * transmissionrpc : for torrent processors
+ * mock : for tests
