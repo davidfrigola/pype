@@ -10,7 +10,7 @@ from mock import MagicMock
 """ Init with all configuration values needed"""
 def init_ok_test():
 
-    processor = TransmissionAddMagnetLinkProcessor({
+    processor = TransmissionAddTorrentProcessor({
                             TRANSMISSION_IP : "ip",
                             TRANSMISSION_PORT: "port",
                             TRANSMISSION_USER: "user",
@@ -20,7 +20,7 @@ def init_ok_test():
 def init_fail_test():
     # TODO needs a better approach for exception detection in tests
     try:
-        processor = TransmissionAddMagnetLinkProcessor({
+        processor = TransmissionAddTorrentProcessor({
                             TRANSMISSION_IP : "ip",
                             TRANSMISSION_PORT: "port",
                             TRANSMISSION_USER: "user"})

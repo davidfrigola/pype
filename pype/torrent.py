@@ -26,7 +26,7 @@ TRANSMISSION_PASSWORD = "transmissionpassword"
  @see white list in previous link for connectivity issues
 
 """
-class TransmissionAddMagnetLinkProcessor(AbstractListProcessor):
+class TransmissionAddTorrentProcessor(AbstractListProcessor):
 
     __config = {}
 
