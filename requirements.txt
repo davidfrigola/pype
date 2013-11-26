@@ -4,3 +4,4 @@ BeautifulSoup4
 transmissionrpc
 mock
 coverage
+coveralls
