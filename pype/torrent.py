@@ -48,6 +48,7 @@ class TransmissionAddTorrentProcessor(AbstractListProcessor):
         try:
             logger.info("Adding torrent "+str(item.getValue()))
             self.__tclient.add_torrent(item.getValue())
+            return  item
         except:
             logger.warn("Error adding torrent"+sys.exc_info()[0])
 
@@ -58,7 +59,7 @@ class TransmissionAddTorrentProcessor(AbstractListProcessor):
         try:
             # Obtain transmission client
             self.__tclient = transmissionrpc.Client(self.__config[TRANSMISSION_IP],
-                                                    port=self.config[TRANSMISSION_PORT],
+                                                    port=self.__config[TRANSMISSION_PORT],
                                                     user=self.__config[TRANSMISSION_USER],
                                                     password=self.__config[TRANSMISSION_PASSWORD])
             logger.debug("Transmission client created")
