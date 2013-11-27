@@ -47,8 +47,9 @@ class TransmissionAddTorrentProcessor(AbstractListProcessor):
 
         try:
             logger.info("Adding torrent "+str(item.getValue()))
-            self.__tclient.add_torrent(item.getValue())
-            return  item
+            torrent_add_result = self.__tclient.add_torrent(item.getValue())
+            logger.info("Result : " + str(torrent_add_result))
+            return  [item]
         except:
             logger.warn("Error adding torrent"+sys.exc_info()[0])
 
