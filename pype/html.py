@@ -24,8 +24,7 @@ class HtmlProcessor(AbstractListProcessor):
 
 
     def process(self,item):
-        """ Process a HTML item , retrieving whatever config stands
-
+        """ Process a HTML item , retrieving whatever is in config
             - item should contain a valid web url
         """
         if FROM_TEXT  in self.config and self.config[FROM_TEXT]:
