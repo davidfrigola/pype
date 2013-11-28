@@ -32,7 +32,7 @@ class BaseItem(AbstractItem):
         return self.value
 
     def setParent(self,parent):
-        pass
+        self.setMetadataValue("parent",parent)
 
     def getParent(self):
         return self.metadata["parent"]
