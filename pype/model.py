@@ -1,4 +1,6 @@
 import logging
+import hashlib
+
 logger = logging.getLogger("pype.model")
 
 
@@ -14,12 +16,19 @@ class AbstractItem:
     def getMetadataValue(self,key):
         pass
 
+    """ Obtain the hash-id like value for the item """
+    def getHash(self):
+        pass
+
+
+HASH_ONCE = "hash_only_once"
 
 """ Base item """
 class BaseItem(AbstractItem):
 
     metadata = {}
 
+    __hash = None
 
     def __init__(self,metadata):
         if not metadata is None:
@@ -49,3 +58,19 @@ class BaseItem(AbstractItem):
             self.metadata = {}
         logger.debug("Setting "+str(key)+" - "+str(value)+" to metadata")
         self.metadata[key] = value
+
+    """ Obtain hash sha512
+        Based on a string value
+    """
+    def getHash(self):
+
+        if HASH_ONCE in self.metadata and self.metadata[HASH_ONCE]:
+            if self.__hash is None:
+                logger.debug("Generating hash only once")
+                self.__hash = haslib.sha512(str(self.getValue())).hexdigest()
+        else:
+            logger.debug/("Generating hash on demand. Use HASH_ONCE for only once generation")
+            self.__hash = haslib.sha512(self.getValue()).hexdigest()
+
+        return self.__hash
+
