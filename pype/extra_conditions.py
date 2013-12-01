@@ -66,7 +66,8 @@ class AlreadyProcessedCondition(AbstractCondition):
 
         self.__config = config
         if ALREADY_PROCESSED_DATASOURCE in config:
-            __datasource = config[ALREADY_PROCESSED_DATASOURCE]
+            logger.info("Setting datasource "+str(config[ALREADY_PROCESSED_DATASOURCE]))
+            self.__datasource = config[ALREADY_PROCESSED_DATASOURCE]
 
     def evaluate(self,item):
         if self.__config[ALREADY_PROCESSED_DATASOURCE] is None:

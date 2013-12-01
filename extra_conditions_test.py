@@ -36,3 +36,21 @@ conditionalProcessor = ConditionalProcessor({CONDITIONS_LIST:[noContainsText2,no
 result = conditionalProcessor.processList([base])
 print "Should be 1 : " + str(len(result))
 
+# AlreadyExists
+from pype.datasource import *
+
+item = BaseItem(None)
+item.setValue("Test Item Value")
+
+datasource = MongoDataSource({})
+
+datasource.store(item)
+
+alreadyExistsCondition = AlreadyProcessedCondition({ALREADY_PROCESSED_DATASOURCE:datasource})
+
+print "Exists? " + str(alreadyExistsCondition.evaluate(item))
+
+itemNew = BaseItem(None)
+itemNew.setValue("Test Item Value New item not in datasource")
+
+print "Exists new item?" + str(alreadyExistsCondition.evaluate(itemNew))
