@@ -51,3 +51,26 @@ class ContainsTextCondition(AbstractCondition):
     def evaluate(self,item):
         return self.__regexCondition.evaluate(item)
 
+
+ALREADY_PROCESSED_DATASOURCE = "alreadyprocesseddatasource"
+
+""" Condition checks if the item has been already processed
+    Must provide a dataSource component
+"""
+class AlreadyProcessedCondition(AbstractCondition):
+
+    __config = {}
+    __datasource = None
+
+    def __init__(self,config):
+
+        self.__config = config
+        if ALREADY_PROCESSED_DATASOURCE in config:
+            __datasource = config[ALREADY_PROCESSED_DATASOURCE]
+
+    def evaluate(self,item):
+        if self.__config[ALREADY_PROCESSED_DATASOURCE] is None:
+            logger.warn("No "+ALREADY_PROCESSED_DATASOURCE+ " provided!! Returning False")
+            return False
+        else:
+            return self.__datasource.exists(item)

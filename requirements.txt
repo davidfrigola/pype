@@ -5,3 +5,4 @@ transmissionrpc
 mock
 coverage
 coveralls
+pymongo

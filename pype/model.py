@@ -16,6 +16,9 @@ class AbstractItem:
     def getMetadataValue(self,key):
         pass
 
+    def getId(self):
+        pass
+
     """ Obtain the hash-id like value for the item """
     def getHash(self):
         pass
@@ -59,6 +62,10 @@ class BaseItem(AbstractItem):
         logger.debug("Setting "+str(key)+" - "+str(value)+" to metadata")
         self.metadata[key] = value
 
+
+    def getId(self):
+        return getHash(self)
+
     """ Obtain hash sha512
         Based on a string value
     """
@@ -69,8 +76,8 @@ class BaseItem(AbstractItem):
                 logger.debug("Generating hash only once")
                 self.__hash = haslib.sha512(str(self.getValue())).hexdigest()
         else:
-            logger.debug/("Generating hash on demand. Use HASH_ONCE for only once generation")
-            self.__hash = haslib.sha512(self.getValue()).hexdigest()
+            logger.debug("Generating hash on demand. Use HASH_ONCE for only once generation")
+            self.__hash = hashlib.sha512(self.getValue()).hexdigest()
 
         return self.__hash
 
