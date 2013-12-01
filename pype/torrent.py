@@ -51,7 +51,7 @@ class TransmissionAddTorrentProcessor(AbstractListProcessor):
             logger.info("Result : " + str(torrent_add_result))
             return  [item]
         except:
-            logger.warn("Error adding torrent"+sys.exc_info()[0])
+            logger.warn("Error adding torrent"+str(sys.exc_info()[0]))
 
 
 
