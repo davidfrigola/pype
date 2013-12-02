@@ -1,4 +1,4 @@
-from extra import AbstractCondition
+from extra import *
 import re
 import logging
 
