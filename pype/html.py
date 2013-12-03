@@ -67,7 +67,7 @@ class BSProcessor(HtmlProcessor):
             else:
                 logger.warn("No items found")
                 resultItem = BaseItem({"parent":item})
-                resultItem.setValue(htmlBS)
+                resultItem.setValue(item)
                 result.append(resultItem)
 
         return result
