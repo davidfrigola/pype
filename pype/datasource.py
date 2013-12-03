@@ -1,6 +1,6 @@
 import logging
 
-logger = logging.getLogger("pype.datasource    ")
+logger = logging.getLogger("pype.datasource")
 
 
 class AbstractDataSource:
@@ -28,6 +28,8 @@ from pymongo import MongoClient
 import datetime
 
 MONGO_DATASOURCE_CONFIG = "mongodatasourceconfig"
+MONGO_DATABASE = "database"
+MONGO_COLLECTION = "collection"
 
 class MongoDataSource(AbstractDataSource):
 
@@ -46,9 +48,15 @@ class MongoDataSource(AbstractDataSource):
         self.__config = config
 
         if MONGO_DATASOURCE_CONFIG in config:
-            ## TODO get mongoClient based on config
+            logger.info("Datasource configuration provided : "
+                        + "DB:" + str(config[MONGO_DATASOURCE_CONFIG][MONGO_DATABASE])
+                        + " COLLECTION : " + str(config[MONGO_DATASOURCE_CONFIG][MONGO_COLLECTION]))
 
-            pass
+            self.__mongoDatabaseName=config[MONGO_DATASOURCE_CONFIG][MONGO_DATABASE]
+            self.__mongoCollectionName = config[MONGO_DATASOURCE_CONFIG][MONGO_COLLECTION]
+            ## TODO get mongoClient based on config with user/pass
+            self.__mongoClient = MongoClient()
+
         else:
             logger.info("Created mongo client without config params (default)")
             self.__mongoClient = MongoClient()
@@ -63,9 +71,10 @@ class MongoDataSource(AbstractDataSource):
         pass
 
     def store(self,item):
-
+        print item.metadata
         self.__collection.insert({"hash":item.getHash(),
                                   "value":item.getValue(),
+                                  "metadata":item.metadata,
                                   "timestamp":datetime.datetime.utcnow()})
 
     def get(self,item):

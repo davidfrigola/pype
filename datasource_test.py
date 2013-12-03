@@ -1,13 +1,18 @@
 
+import logging
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
+
 from pype.extra_conditions import *
 from pype.core import *
 from pype.extra import *
 from pype.datasource import *
 
-item = BaseItem(None)
+item = BaseItem({"m1":"v1","m2":"v2"})
 item.setValue("The Item Value")
 
-datasource = MongoDataSource({})
+
+datasource = MongoDataSource({MONGO_DATASOURCE_CONFIG:{MONGO_DATABASE:"pype_test",MONGO_COLLECTION:"test_collection"}})
+
 
 datasource.store(item)
 print "Exists? " + str(datasource.exists(item))
