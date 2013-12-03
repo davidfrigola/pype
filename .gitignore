@@ -37,3 +37,4 @@ nosetests.xml
 /cover
 /pbrssspider.py
 /torrent_rssspider.py
+/hbrowse_spider.py

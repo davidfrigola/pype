@@ -86,6 +86,6 @@ class MongoDataSource(AbstractDataSource):
         pass
 
     def delete(self,item):
-
-        self.__collection.delete({"hash":item.getHash()})
+        logger.warning("Deleting item " + str(item.getHash()))
+        self.__collection.remove({"hash":item.getHash()})
 
