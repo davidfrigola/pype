@@ -23,6 +23,9 @@ class AbstractDataSource:
     def delete(self,item):
         pass
 
+    def all(self):
+        pass
+
 
 from pymongo import MongoClient
 import datetime
@@ -88,4 +91,8 @@ class MongoDataSource(AbstractDataSource):
     def delete(self,item):
         logger.warning("Deleting item " + str(item.getHash()))
         self.__collection.remove({"hash":item.getHash()})
+
+    def all(self):
+
+        return self.__collection.find();
 
