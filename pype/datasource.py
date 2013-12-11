@@ -1,4 +1,5 @@
 import logging
+from pype.core import *
 
 logger = logging.getLogger("pype.datasource")
 
@@ -94,5 +95,12 @@ class MongoDataSource(AbstractDataSource):
 
     def all(self):
 
-        return self.__collection.find();
+        result = []
+        dbResult = self.__collection.find();
+        for dbEntity in dbResult:
+            item = BaseItem(None)
+            item.setValue(dbEntity["value"])
 
+            result.append(item)
+
+        return result
