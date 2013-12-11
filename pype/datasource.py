@@ -98,9 +98,8 @@ class MongoDataSource(AbstractDataSource):
         result = []
         dbResult = self.__collection.find();
         for dbEntity in dbResult:
-            item = BaseItem(None)
+            item = BaseItem(dbEntity["metadata"])
             item.setValue(dbEntity["value"])
-
             result.append(item)
 
         return result

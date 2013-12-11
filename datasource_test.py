@@ -20,7 +20,7 @@ print "Item : " +str(datasource.get(item))
 
 result = datasource.all()
 for e in result:
-    print "Element : " + str(e.getValue() +"-"+ str(e.getHash()))
+    print "Element : " + str(e.getValue()+"-"+str(e.getMetadataValue("m1")) +"-"+ str(e.getHash()))
 
 datasource.delete(item)
 
