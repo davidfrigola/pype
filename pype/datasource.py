@@ -1,5 +1,5 @@
 import logging
-from pype.core import *
+from core import *
 
 logger = logging.getLogger("pype.datasource")
 
