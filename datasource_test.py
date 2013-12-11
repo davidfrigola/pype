@@ -19,8 +19,8 @@ print "Exists? " + str(datasource.exists(item))
 print "Item : " +str(datasource.get(item))
 
 result = datasource.all()
-for e in result:
-    print "Element : " + str(e.getValue()+"-"+str(e.getMetadataValue("m1")) +"-"+ str(e.getHash()))
+for idx, e in enumerate(result):
+    print "Element"+str(idx)+"-" + str(e.getValue()+"-"+str(e.getMetadataValue("m1")) +"-"+ str(e.getHash()))
 
 datasource.delete(item)
 
