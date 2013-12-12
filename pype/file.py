@@ -99,7 +99,7 @@ class FileProcessor(AbstractListProcessor):
             # Open the file, strip lines and generate new items
             lines = [line.strip() for line in open(self.__config[FILE_NAME],"r")]
             for l in lines:
-                item = BaseItem({"parent",item})
+                item = BaseItem({"parent":item})
                 item.setValue(l)
                 result.append(item)
             pass
