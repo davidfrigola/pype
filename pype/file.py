@@ -42,7 +42,7 @@ class FileDownloader(AbstractListProcessor):
             logger.info("Creating folder "+directory)
             os.makedirs(directory)
 
-        log.info("Downloading file to "+directory+file_name)
+        logger.info("Downloading file to "+directory+file_name)
 
         file = open(directory + file_name,'wb')
         file.write(downloadFileHandler.read())
@@ -71,6 +71,7 @@ FILE_NAME = "fileprocessor_filename"
 FILE_OP = "fileprocessor_operation"
 FILE_OP_STORE = "fileprocessor_operation_store"
 FILE_OP_RETRIEVE = "fileprocessor_operation_retrieve"
+FILE_METADATA_FILENAME = "fileprocessor_metadata_filename"
 """ Fileprocessor
     * OP = STORE : stores all item values into the configured file
     * OP = RETRIEVE : retrieves all item values into new item objects from the configured file
@@ -90,7 +91,10 @@ class FileProcessor(AbstractListProcessor):
 
         result = []
         if self.__config[FILE_OP]==FILE_OP_STORE:
-            pass
+            # Write item value and newline, adds metadata filename and returns item
+            self.__filehandler.write(item.getValue()+"\n")
+            item.setMetadataValue(FILE_METADATA_FILENAME,self.__config[FILE_NAME])
+            result = [item]
         elif self.__config[FILE_OP]==FILE_OP_RETRIEVE:
             # Open the file, strip lines and generate new items
             lines = [line.strip() for line in open(self.__config[FILE_NAME],"r")]
@@ -110,14 +114,14 @@ class FileProcessor(AbstractListProcessor):
         result = []
         if self.__config[FILE_OP]==FILE_OP_STORE:
             #Open file and process all items
-            ##TODO open file an store locally (class variable)
+            self.__filehandler = open(self.__config[FILE_NAME],"w")
             for item in items:
-                result = result + process(self,item)
-
+                result.extend(self.process(item))
+            self.__filehandler.close()
 
         elif self.__config[FILE_OP]==FILE_OP_RETRIEVE:
             for item in items:
-               result = result + process(self,item)
+               result = result + self.process(item)
             pass
         else:
             raise "Unknown operation"
