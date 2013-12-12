@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 setup(
     name='pype',
@@ -9,4 +9,5 @@ setup(
     author='davidfrigola',
     author_email='daviz@mailinator.com',
     url='http://github.com/davidfrigola/pype',
-    packages=['pype'])
+    packages=['pype']
+)
