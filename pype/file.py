@@ -88,9 +88,38 @@ class FileProcessor(AbstractListProcessor):
 
     def process(self,item):
 
-        pass
+        result = []
+        if self.__config[FILE_OP]==FILE_OP_STORE:
+            pass
+        elif self.__config[FILE_OP]==FILE_OP_RETRIEVE:
+            # Open the file, strip lines and generate new items
+            lines = [line.strip() for line in open(self.__config[FILE_NAME],"r")]
+            for l in lines:
+                item = BaseItem({"parent",item})
+                item.setValue(l)
+                result.append(item)
+            pass
+        else:
+            raise "Unknown operation"
+
+        return result
 
 
     def processList(self,items):
 
-        pass
+        result = []
+        if self.__config[FILE_OP]==FILE_OP_STORE:
+            #Open file and process all items
+            ##TODO open file an store locally (class variable)
+            for item in items:
+                result = result + process(self,item)
+
+
+        elif self.__config[FILE_OP]==FILE_OP_RETRIEVE:
+            for item in items:
+               result = result + process(self,item)
+            pass
+        else:
+            raise "Unknown operation"
+
+        return result;
