@@ -65,3 +65,32 @@ class FileDownloader(AbstractListProcessor):
             logger.debug("No subfolder configured")
             return ""
 
+
+
+FILE_NAME = "fileprocessor_filename"
+FILE_OP = "fileprocessor_operation"
+FILE_OP_STORE = "fileprocessor_operation_store"
+FILE_OP_RETRIEVE = "fileprocessor_operation_retrieve"
+""" Fileprocessor
+    * OP = STORE : stores all item values into the configured file
+    * OP = RETRIEVE : retrieves all item values into new item objects from the configured file
+"""
+class FileProcessor(AbstractListProcessor):
+
+    __config = {}
+
+    __filehandler = None
+
+    def __init__(self,config):
+
+        self.__config = config
+
+
+    def process(self,item):
+
+        pass
+
+
+    def processList(self,items):
+
+        pass
