@@ -1,6 +1,6 @@
 import logging
 import hashlib
-
+import sys
 logger = logging.getLogger("pype.model")
 
 
@@ -84,9 +84,10 @@ class BaseItem(AbstractItem):
 
     def __generateHash(self):
         try:
-            self.__hash = hashlib.sha512(self.getValye()).hexdigest()
+            self.__hash = hashlib.sha512(self.getValue()).hexdigest()
         except:
             logger.error("Error generating hash value")
+            print sys.exc_info()[0]
             self.__hash = "ErrorGeneratingHash" #TODO Add timestamp and random
 
     def __str__(self):
