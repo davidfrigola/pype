@@ -88,3 +88,7 @@ class BaseItem(AbstractItem):
         except:
             logger.error("Error generating hash value")
             self.__hash = "ErrorGeneratingHash" #TODO Add timestamp and random
+
+    def __str__(self):
+
+        return "[" + str(self.value) +"]-"+ str(self.metadata)

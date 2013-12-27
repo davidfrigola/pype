@@ -31,7 +31,7 @@ class HtmlProcessor(AbstractListProcessor):
             logger.debug("Using text to obtain BS object")
             htmlBS = BeautifulSoup(item.getValue())
         else:
-            logger.debug("Request to "+item.getValue())
+            logger.debug("Request to "+ str(item.getValue()))
             htmlBS = BeautifulSoup(requests.get(item.getValue()).text)
         bsHtmlItem = BaseItem({"parent":item})
         bsHtmlItem.setValue(htmlBS)
@@ -100,10 +100,10 @@ class BSProcessor(HtmlProcessor):
 
         elif "get" in self.__config and self.__config["get"] is not None:
 
-            logger.debug("Processing 'get' config " + str(self.__config["get"]))
+            logger.debug("Processing 'get' config '" + str(self.__config["get"]) + "'")
             getConfigDict = self.__config["get"]
             for getKey in getConfigDict:
-
+                logger.debug("Processing GET '"+getKey+"'")
                 if getKey is not None:
 
                     getItem = BaseItem({"parent":item})
