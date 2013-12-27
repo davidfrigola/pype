@@ -74,10 +74,17 @@ class BaseItem(AbstractItem):
         if HASH_ONCE in self.metadata and self.metadata[HASH_ONCE]:
             if self.__hash is None:
                 logger.debug("Generating hash only once")
-                self.__hash = haslib.sha512(str(self.getValue())).hexdigest()
+                self.__generateHash()
         else:
             logger.debug("Generating hash on demand. Use HASH_ONCE for only once generation")
-            self.__hash = hashlib.sha512(self.getValue()).hexdigest()
+            logger.debug("Generating hash for "+ str(self.getValue()))
+            self.__generateHash()
 
         return self.__hash
 
+    def __generateHash(self):
+        try:
+            self.__hash = hashlib.sha512(self.getValye()).hexdigest()
+        except:
+            logger.error("Error generating hash value")
+            self.__hash = "ErrorGeneratingHash" #TODO Add timestamp and random

@@ -14,11 +14,11 @@ FROM_TEXT = "fromtext"
 
 class HtmlProcessor(AbstractListProcessor):
 
-    config = None
+    __config = None
 
     def __init__(self,config):
-        self.config = config
-
+        self.__config = config
+        ## TODO Validate config
 
 
 
@@ -27,7 +27,7 @@ class HtmlProcessor(AbstractListProcessor):
         """ Process a HTML item , retrieving whatever is in config
             - item should contain a valid web url
         """
-        if FROM_TEXT  in self.config and self.config[FROM_TEXT]:
+        if FROM_TEXT  in self.__config and self.__config[FROM_TEXT]:
             logger.debug("Using text to obtain BS object")
             htmlBS = BeautifulSoup(item.getValue())
         else:
@@ -36,7 +36,7 @@ class HtmlProcessor(AbstractListProcessor):
         bsHtmlItem = BaseItem({"parent":item})
         bsHtmlItem.setValue(htmlBS)
 
-        bsProcessor = BSProcessor(self.config)
+        bsProcessor = BSProcessor(self.__config)
 
         return bsProcessor.process(bsHtmlItem)
 
@@ -49,6 +49,11 @@ class HtmlProcessor(AbstractListProcessor):
     Implemented FIND filter (set "find" in the metadata and a valid BS find expression)
 """
 class BSProcessor(HtmlProcessor):
+
+    __config = None
+
+    def __init__(self,config):
+        self.__config = config
 
     """ Item should be a BaseItem with a BSObject set as value """
     def process(self,item):
@@ -77,9 +82,9 @@ class BSProcessor(HtmlProcessor):
 
         result = []
 
-        if "find" in self.config and self.config["find"] is not None:
-            logger.debug("Processing 'find' config " + str(self.config["find"]))
-            findConfigDict = self.config["find"]
+        if "find" in self.__config and self.__config["find"] is not None:
+            logger.debug("Processing 'find' config " + str(self.__config["find"]))
+            findConfigDict = self.__config["find"]
             # Process all find config definitions
             for findKey in findConfigDict:
 
@@ -93,10 +98,10 @@ class BSProcessor(HtmlProcessor):
                     foundItem.setValue(foundElement)
                     result.append(foundItem)
 
-        elif "get" in self.config and self.config["get"] is not None:
+        elif "get" in self.__config and self.__config["get"] is not None:
 
-            logger.debug("Processing 'get' config " + str(self.config["get"]))
-            getConfigDict = self.config["get"]
+            logger.debug("Processing 'get' config " + str(self.__config["get"]))
+            getConfigDict = self.__config["get"]
             for getKey in getConfigDict:
 
                 if getKey is not None:
@@ -109,6 +114,7 @@ class BSProcessor(HtmlProcessor):
                     raise "Error : should provide something to GET"
 
         else:
-            result = None
+            logger.warning("Nothing to process internally. Returning same item")
+            result = [item]
 
         return result
