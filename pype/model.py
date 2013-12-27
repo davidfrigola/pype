@@ -25,6 +25,7 @@ class AbstractItem:
 
 
 HASH_ONCE = "hash_only_once"
+VALUE_AS_HASH = "value_as_hash"
 
 """ Base item """
 class BaseItem(AbstractItem):
@@ -70,6 +71,10 @@ class BaseItem(AbstractItem):
         Based on a string value
     """
     def getHash(self):
+
+        if VALUE_AS_HASH in self.metadata and self.metadata[VALUE_AS_HASH]:
+            logger.debug("Value as hash set to True")
+            return self.value
 
         if HASH_ONCE in self.metadata and self.metadata[HASH_ONCE]:
             if self.__hash is None:

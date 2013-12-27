@@ -75,10 +75,11 @@ class MongoDataSource(AbstractDataSource):
         pass
 
     def store(self,item):
-        print item.metadata
+        logger.debug("Storing "+str(item))
+
         self.__collection.insert({"hash":item.getHash(),
                                   "value":item.getValue(),
-                                  "metadata":item.metadata,
+                                 # "metadata":item.metadata,
                                   "timestamp":datetime.datetime.utcnow()})
 
     def get(self,item):
