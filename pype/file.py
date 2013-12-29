@@ -17,6 +17,7 @@ FILE_ADD_AS_METADATA_FIELD = "file"
 
 FILE_NAME_NUMBER = "filenamenumber"
 
+FILE_ADD_DATE = "file_add_date"
 
 """ Downloads a file from a url """
 class FileDownloader(AbstractListProcessor):
@@ -45,6 +46,7 @@ class FileDownloader(AbstractListProcessor):
             logger.info("Creating folder "+directory)
             os.makedirs(directory)
 
+        # TODO use FILE_ADD_DATE to add date YYYYMMDDhhmm
         logger.info("Downloading file to "+directory+file_name)
 
         file = open(directory + file_name,'wb')

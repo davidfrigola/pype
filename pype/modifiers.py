@@ -85,3 +85,29 @@ class FromMetadataStringModifier(AbstractModifier):
         modifier.setValue(valueForModifier)
 
         return modifier.modify(item)
+
+""" Postpends a string to the value of the item (should be a string) """
+POSTPEND_VALUE = "postpend_value"
+class PostpendStringModifier(AbstractModifier):
+
+    def __init__(self,config):
+        self.config = config
+        if (not POSTPEND_VALUE in config) or config[POSTPEND_VALUE] is None:
+            logger.error("Configuration must contain "+POSTPEND_VALUE)
+            raise "Configuration must contain "+POSTPEND_VALUE
+
+    def modify(self,item):
+
+        logger.debug("Postpending "+str(self.config[POSTPEND_VALUE]))
+
+
+        itemResult = BaseItem({"parent":item})
+        itemResult.setValue(str(item.getValue())+ str(self.config[PREPEND_VALUE]))
+
+        logger.debug("Modification result " + str(itemResult.getValue()))
+        return [itemResult]
+
+    def setValue(self,value):
+        self.config = {POSTPEND_VALUE:value}
+
+
