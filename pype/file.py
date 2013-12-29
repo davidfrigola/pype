@@ -15,6 +15,8 @@ FILE_ADD_AS_METADATA = "addasmetadata"
 # Field name for file as metadata within the item
 FILE_ADD_AS_METADATA_FIELD = "file"
 
+FILE_NAME_NUMBER = "filenamenumber"
+
 
 """ Downloads a file from a url """
 class FileDownloader(AbstractListProcessor):
@@ -32,10 +34,11 @@ class FileDownloader(AbstractListProcessor):
             logger.error("You must specify the metadata FLAG")
             raise "You must specify the metadata FLAG"
 
-    def process(self,item):
+    def process(self,item,file_name=None):
         file = None
         downloadFileHandler = urllib2.urlopen(item.getValue())
-        file_name = item.getValue().split('/')[-1]
+        if file_name is None:
+            file_name = item.getValue().split('/')[-1]
         directory = self.__config[FILE_FOLDER] + self.__getFileSubfolder(item)
 
         if not os.path.exists(directory):
@@ -57,6 +60,20 @@ class FileDownloader(AbstractListProcessor):
             newFileItem.setValue(file)
             return [newFileItem]
 
+    def processList(self,items):
+        result = []
+        for index,item in enumerate(items):
+            if FILE_NAME_NUMBER in self.__config and self.__config[FILE_NAME_NUMBER]:
+                processedItem = self.process(item,str(index))
+            else:
+                processedItem = self.process(item,None)
+
+            if processedItem is not None:
+                result = result + processedItem
+            else:
+                logger.warning("Processed item %s returns [] empty array",str(item))
+
+        return result
     """ Item subfolder based on metadata """
     def __getFileSubfolder(self,item):
         if not item.getMetadataValue(FILE_SUBFOLDER_METADATA) is None:
@@ -99,7 +116,7 @@ class FileProcessor(AbstractListProcessor):
             # Open the file, strip lines and generate new items
             lines = [line.strip() for line in open(self.__config[FILE_NAME],"r")]
             for l in lines:
-                item = BaseItem({"parent":item})
+                item = BaseItem({"parent",item})
                 item.setValue(l)
                 result.append(item)
             pass

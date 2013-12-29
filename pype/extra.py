@@ -210,17 +210,17 @@ class SleepProcessor(AbstractListProcessor):
 
 
     def process(self,item):
-        self.__sleep()
+        self.__sleep(item)
         return [item]
 
 
-    def __sleep(self):
+    def __sleep(self,item):
         time = self.__time_min
         if self.__time_random:
             # sleep randomly
             time =random.uniform(self.__time_min,self.__time_max)
 
-        logger.info("Sleeping seconds : " +  str(time))
+        logger.info("Sleeping seconds : " +  str(time) +" on " + str(item.getValue()))
         sleep(time)
 
 
