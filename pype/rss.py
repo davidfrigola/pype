@@ -44,6 +44,8 @@ class RssProcessor(AbstractListProcessor):
 				return None
 
 			if resultEntry is not None:
+				#Add always title as metadata
+				resultEntry.setMetadataValue("title",entry.title)
 				logger.debug("Entry value for '" + _self.field + "'= " + str(resultEntry.getValue()))
 				result.append(resultEntry)
 		logger.debug("Returning %s elements",str(len(result)))

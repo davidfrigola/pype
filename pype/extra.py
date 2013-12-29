@@ -51,18 +51,28 @@ class ChainProcessor(AbstractListProcessor):
 
 class ModifierProcessor(AbstractListProcessor):
 
+    __config = {}
+
     def __init__(self,config):
-        self.config = config
+        self.__config = config
 
     def process(self,item):
         result = []
-        for modifier in self.config[MODIFIERS_LIST]:
-            if not isinstance(modifier,AbstractModifier):
-                raise "Unknown modifier in the modifiers list " + str(modifier)
-            else:
-                result = modifier.modify(item)
+        if MODIFIERS_LIST in self.__config and not self.__config[MODIFIERS_LIST] is None:
+            for modifier in self.__config[MODIFIERS_LIST]:
+                if not isinstance(modifier,AbstractModifier):
+                    raise "Unknown modifier in the modifiers list " + str(modifier)
+                else:
+                    logger.debug("Modifying "+str(item.getValue())+" using "+ str(modifier))
+                    result = modifier.modify(item)
+        else:
+            logger.warn("Nothing to modify : no list of modifiers")
+            result = [item]
+
 
         return result
+
+
 """ Base class for modifiers
     Implements the identity modifier (returns the same item passed, as list)
 """
@@ -78,6 +88,8 @@ class AbstractModifier:
         # TO Implement by subclasses
         return [item]
 
+    def setValue(self,value):
+        pass
 
 """ Apply more than 1 processor to the same items list, and get the result as a single list """
 class ParalelProcessor(AbstractListProcessor):

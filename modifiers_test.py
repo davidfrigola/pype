@@ -7,9 +7,17 @@ base = BaseItem({"parent":None})
 base.setValue("This is my value")
 
 addTESTModifier = PrependStringModifier({"prependvalue":"____PREPEND___TEST___"})
-modifierProcessor = ModifierProcessor({"modifierslist":[addTESTModifier]})
+removePREPENDModifier = RemoveStringModifier({REMOVE_VALUE:"PREPEND"})
+modifierProcessor = ModifierProcessor({MODIFIERS_LIST:[addTESTModifier]})
 
 result = modifierProcessor.process(base)
 
+modifierProcessor = ModifierProcessor({MODIFIERS_LIST:[removePREPENDModifier]})
+
+result = modifierProcessor.processList(result)
+
 for e in result:
     print e.getValue() + "<<<" + e.getMetadataValue("parent").getValue()
+
+
+
