@@ -102,7 +102,7 @@ class PostpendStringModifier(AbstractModifier):
 
 
         itemResult = BaseItem({"parent":item})
-        itemResult.setValue(str(item.getValue())+ str(self.config[PREPEND_VALUE]))
+        itemResult.setValue(str(item.getValue())+ str(self.config[POSTPEND_VALUE]))
 
         logger.debug("Modification result " + str(itemResult.getValue()))
         return [itemResult]

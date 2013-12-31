@@ -37,6 +37,8 @@ class RssProcessor(AbstractListProcessor):
 				resultEntry.setValue(entry.link)
 			elif _self.field == "title":
 				resultEntry.setValue(entry.title)
+			elif _self.field == "content":
+				resultEntry.setValue(entry.content)
 			else:
 
 				""" Unknown field to obtain. Nothing to return """

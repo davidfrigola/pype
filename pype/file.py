@@ -2,6 +2,7 @@ from core import *
 import os
 import urllib2
 import logging
+import datetime
 
 logger = logging.getLogger("pype.file")
 
@@ -19,8 +20,15 @@ FILE_NAME_NUMBER = "filenamenumber"
 
 FILE_ADD_DATE = "file_add_date"
 
+class AbstractFileProcessor(AbstractListProcessor):
+
+    def getDateForFilename(self):
+        now = datetime.datetime.now()
+        return now.strftime("%Y%m%d_%H%M%S")
+
+
 """ Downloads a file from a url """
-class FileDownloader(AbstractListProcessor):
+class FileDownloader(AbstractFileProcessor):
 
     __config = {}
 
@@ -95,7 +103,7 @@ FILE_METADATA_FILENAME = "fileprocessor_metadata_filename"
     * OP = STORE : stores all item values into the configured file
     * OP = RETRIEVE : retrieves all item values into new item objects from the configured file
 """
-class FileProcessor(AbstractListProcessor):
+class FileProcessor(AbstractFileProcessor):
 
     __config = {}
 
