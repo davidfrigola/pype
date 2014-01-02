@@ -76,7 +76,6 @@ class ScriptProcessor(AbstractProcessor):
         """ Process a list of items """
         if self.__mode == SCRIPT_EXEC_ONCE:
             self.__executescript(None)
-            pass
         else:
             return super(ScriptProcessor,self).processList(items)
 
