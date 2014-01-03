@@ -137,5 +137,5 @@ class AddItemsProcessor(AbstractListProcessor):
 
         if self.__itemstopostpend is not None:
             logger.debug("Postpending items")
-            result = result.extend(self.__itemstopostpend)
+            result = result + self.__itemstopostpend
         return result
