@@ -44,12 +44,19 @@ class DRYProcessor(AbstractListProcessor):
  Executes a script
   * Per item
   * Only once
+  * Command (fixed command value)
 
 """
 SCRIPT_EXEC_MODE = "executescriptmode"
 SCRIPT_EXEC_ONCE = "executescriptonce"
 SCRIPT_EXEC_PERITEM = "executescriptperitem"
 SCRIPT_EXEC_COMMAND = "executescritpcommand"
+SCRIPT_EXEC_COMMAND_VALUE = "executescritpcommandvalue"
+SCRIPT_EXEC_ITEMVALUEASCOMMAND = "exectuescriptitemvalueascommand"
+SCRIPT_EXEC_OS = "executescriptos"
+SCRIPT_EXEC_OS_NIX = "executescriptosnix"
+SCRIPT_EXEC_OS_WIN = "executescriptoswin"
+
 #SCRIPT_EXEC_COMMAND_PARAM_ITEM_VALUE = "executescriptcommandparamitemvalue"
 class ScriptProcessor(AbstractProcessor):
 
