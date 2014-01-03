@@ -29,4 +29,4 @@ def postpend_items_test():
     postpendProcessor = AddItemsProcessor({ADDITEMS_POSTPEND:postpendItems})
     result = postpendProcessor.processList(items)
 
-    assert len(result)==len(items) + len(prependItems)
+    assert len(result)==len(items) + len(postpendItems)
