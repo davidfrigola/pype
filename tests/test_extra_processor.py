@@ -30,3 +30,15 @@ def postpend_items_test():
     result = postpendProcessor.processList(items)
 
     assert len(result)==len(items) + len(postpendItems)
+
+
+def prepostpend_items_test():
+    addItem1 = BaseItem(None)
+    addItem1.setValue("addItem1")
+    addItem2 = BaseItem(None)
+    addItem2.setValue("addItem2")
+    addItems = [addItem1,addItem2]
+    addItemsProcessor = AddItemsProcessor({ADDITEMS_POSTPEND:addItems,ADDITEMS_PREPEND:addItems})
+    result = addItemsProcessor.processList(items)
+
+    assert len(result)==len(items) + (2 * len(addItems))
