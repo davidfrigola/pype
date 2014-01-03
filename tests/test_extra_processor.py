@@ -48,7 +48,7 @@ def logitem_nomodify_test():
     item1 = BaseItem(None,"item1")
     item2 = BaseItem(None,"item2")
 
-    processor = LogItemProcessor()
+    processor = LogItemsProcessor()
     result = processor.processList([item1,item2])
 
     assert result[0] == item1
