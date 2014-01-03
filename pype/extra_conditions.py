@@ -21,6 +21,8 @@ class RegexCondition(AbstractCondition):
             self.__p = re.compile(self.__config["value"])
 
     def evaluate(self,item):
+        if item.getValue() is None:
+            return False
          #DBG
         logger.debug("Value to match : "+ self.__config["value"] + " in ["+str(item.getValue())+"]")
         logger.debug(" match : " + str(self.__p.match(item.getValue())))
@@ -49,6 +51,8 @@ class ContainsTextCondition(AbstractCondition):
 
 
     def evaluate(self,item):
+        if item.getValue() is None:
+            return False
         return self.__regexCondition.evaluate(item)
 
 

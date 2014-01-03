@@ -12,6 +12,11 @@ print str(result)
 filename = "./test.txt"
 
 fileprocessor = FileProcessor({FILE_NAME:filename,FILE_OP:FILE_OP_STORE})
+
+print fileprocessor.getDateForFilename()
+
+exit
+
 item2 = BaseItem(None)
 item2.setValue("value2")
 
