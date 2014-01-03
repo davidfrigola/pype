@@ -26,7 +26,6 @@ class AbstractItem:
 
 HASH_ONCE = "hash_only_once"
 VALUE_AS_HASH = "value_as_hash"
-
 """ Base item """
 class BaseItem(AbstractItem):
 
@@ -34,9 +33,11 @@ class BaseItem(AbstractItem):
 
     __hash = None
 
-    def __init__(self,metadata):
+    def __init__(self,metadata,value=None):
         if not metadata is None:
             self.metadata = metadata
+        if not value is None:
+            self.value = value
 
     def setValue(self,value):
         self.value = value

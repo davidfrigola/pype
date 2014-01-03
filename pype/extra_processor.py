@@ -139,3 +139,34 @@ class AddItemsProcessor(AbstractListProcessor):
             logger.debug("Postpending items")
             result = result + self.__itemstopostpend
         return result
+
+
+LOGITEMS_MODE = "logitems_mode"
+LOGITEMS_MODE_LOGGER = "logitems_mode_logger"
+LOGITEMS_MODE_STDOUT = "logitems_mode_stdout"
+
+class LogItemsProcessor(AbstractListProcessor):
+    """
+        Just a logger for items in the stream (debug/trace purposes)
+        Two modes available:
+        * STDOUD (default if not set in config) prints the item
+        * LOGGER : uses INFO level to log to the configured logger
+    """
+    __config = {}
+
+    def __init__(self,config):
+        if config is not None:
+            self.__config = config
+
+    def process(self,item):
+        if not LOGITEMS_MODE in self.__config:
+            # default mode stdout
+            self.__config = {LOGITEMS_MODE : LOGITEMS_MODE_STDOUT}
+
+        if self.__config[LOGITEMS_MODE] == LOGITEMS_MODE_LOGGER:
+            logger.info(str(item))
+        else:
+            #default
+            print str(item)
+
+        return [item]
