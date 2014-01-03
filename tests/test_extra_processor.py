@@ -42,3 +42,14 @@ def prepostpend_items_test():
     result = addItemsProcessor.processList(items)
 
     assert len(result)==len(items) + (2 * len(addItems))
+
+
+def logitem_nomodify_test():
+    item1 = BaseItem(None,"item1")
+    item2 = BaseItem(None,"item2")
+
+    processor = LogItemProcessor()
+    result = processor.processList([item1,item2])
+
+    assert result[0] == item1
+    assert result[1] == item2
