@@ -18,3 +18,7 @@ Module Dependencies
 ===================
 
  * see requirements.txt
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/davidfrigola/pype/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
