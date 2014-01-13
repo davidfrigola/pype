@@ -141,7 +141,10 @@ class FileProcessor(AbstractFileProcessor):
         result = []
         if self.__config[FILE_OP]==FILE_OP_STORE:
             #Open file and process all items
-            self.__filehandler = open(self.__config[FILE_NAME],"w")
+            filename = self.__config[FILE_NAME]
+            if FILE_ADD_DATE in self.__config and self.__config[FILE_ADD_DATE]:
+                filename = filename + self.getDateForFilename()
+            self.__filehandler = open(filename,"w")
             for item in items:
                 result.extend(self.process(item))
             self.__filehandler.close()
