@@ -61,7 +61,7 @@ class BaseItem(AbstractItem):
 
         if self.metadata is None:
             self.metadata = {}
-        logger.debug("Setting "+str(key)+" - "+str(value)+" to metadata")
+        #23 logger.debug("Setting "+str(key)+" - "+str(value)+" to metadata")
         self.metadata[key] = value
 
 
