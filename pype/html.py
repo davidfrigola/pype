@@ -27,20 +27,27 @@ class HtmlProcessor(AbstractListProcessor):
         """ Process a HTML item , retrieving whatever is in config
             - item should contain a valid web url
         """
-        if FROM_TEXT  in self.__config and self.__config[FROM_TEXT]:
-            logger.debug("Using text to obtain BS object")
-            htmlBS = BeautifulSoup(item.getValue())
-        else:
-            logger.debug("Request to "+ str(item.getValue()))
-            htmlBS = BeautifulSoup(requests.get(item.getValue()).text)
-        bsHtmlItem = BaseItem({"parent":item})
-        bsHtmlItem.setValue(htmlBS)
+        try:
+            if FROM_TEXT  in self.__config and self.__config[FROM_TEXT]:
+                logger.debug("Using text to obtain BS object")
+                htmlBS = BeautifulSoup(item.getValue())
+            else:
+                logger.debug("Request to "+ str(item.getValue()))
+                try:
+                    htmlBS = BeautifulSoup(requests.get(item.getValue()).text)
+                except:
+                    logger.error("Some errors requesting item value.Returning [] ")
+                    return []
+            bsHtmlItem = BaseItem({"parent":item})
+            bsHtmlItem.setValue(htmlBS)
 
-        bsProcessor = BSProcessor(self.__config)
+            bsProcessor = BSProcessor(self.__config)
 
-        return bsProcessor.process(bsHtmlItem)
+            return bsProcessor.process(bsHtmlItem)
 
-
+        except:
+            logger.error("Errors during html processing : ignoring")
+            return []
 
 
 
