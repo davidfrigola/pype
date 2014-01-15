@@ -57,7 +57,7 @@ class FileDownloader(AbstractFileProcessor):
         # TODO use FILE_ADD_DATE to add date YYYYMMDDhhmm
         logger.info("Downloading file to "+directory+file_name)
 
-        file = open(directory + file_name,'wb')
+        file = open(directory + file_name,'w')
         file.write(downloadFileHandler.read())
         file.close()
         # Return result
@@ -144,7 +144,7 @@ class FileProcessor(AbstractFileProcessor):
             filename = self.__config[FILE_NAME]
             if FILE_ADD_DATE in self.__config and self.__config[FILE_ADD_DATE]:
                 filename = filename + self.getDateForFilename()
-            self.__filehandler = open(filename,"w")
+            self.__filehandler = open(filename,"a")
             for item in items:
                 result.extend(self.process(item))
             self.__filehandler.close()
