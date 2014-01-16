@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import logging
+import traceback
 
 import sys
 
@@ -11,7 +12,7 @@ logger = logging.getLogger("pype.html")
 
 """ Config constants for HtmlProcessor """
 FROM_TEXT = "fromtext"
-
+HTML_REQUEST_AGENT_HEADER = "html_request_agent_header"
 class HtmlProcessor(AbstractListProcessor):
 
     __config = None
@@ -34,9 +35,10 @@ class HtmlProcessor(AbstractListProcessor):
             else:
                 logger.debug("Request to "+ str(item.getValue()))
                 try:
-                    htmlBS = BeautifulSoup(requests.get(item.getValue()).text)
+                    htmlBS = BeautifulSoup(requests.get(item.getValue(),headers=self.__getHeaders()).text)
                 except:
                     logger.error("Some errors requesting item value.Returning [] ")
+                    traceback.print_exc()
                     return []
             bsHtmlItem = BaseItem({"parent":item})
             bsHtmlItem.setValue(htmlBS)
@@ -49,7 +51,13 @@ class HtmlProcessor(AbstractListProcessor):
             logger.error("Errors during html processing : ignoring")
             return []
 
-
+    def __getHeaders(self):
+            if HTML_REQUEST_AGENT_HEADER in self.__config:
+                logger.debug("Using configured useragent " + self.__config[HTML_REQUEST_AGENT_HEADER])
+                return {"User-Agent" : self.__config[HTML_REQUEST_AGENT_HEADER]}
+            else:
+                logger.debug("Using DEFAULT useragent")
+                return {'User-Agent': 'Mozilla/5.0'}
 
 """ BS Object processor
     using BeautifullSoup features to parse HTML and find elements
