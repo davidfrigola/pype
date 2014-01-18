@@ -66,7 +66,7 @@ class BaseItem(AbstractItem):
 
 
     def getId(self):
-        return getHash(self)
+        return self.getHash()
 
     """ Obtain hash sha512
         Based on a string value

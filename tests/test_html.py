@@ -20,3 +20,14 @@ def parse_html_from_text_test():
     print result
     assert len(result) == 1
 
+
+def parse_html_error_test():
+
+    html_text = "<bad format></test>"
+    item = BaseItem(None,html_text)
+
+    processor = HtmlProcessor({FROM_TEXT:True,"find":{"p":{"class":"pclass"}}})
+
+    result = processor.process(item)
+
+    assert result == []

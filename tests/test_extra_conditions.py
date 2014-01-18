@@ -45,4 +45,6 @@ def evaluate_false_AlreadyProcessedCondition():
 
     assert not condition.evaluate(BaseItem(None,"any value"))
 
+def evaluate_true_AlreadyProcessedCondition():
+    pass
 
