@@ -167,10 +167,23 @@ class DefaultUserAgentHeaderProvider(AbstractHeaderProvider):
     """ Config can contain a USER_AGENT_HEADER key with the user agent value for the User-Agent header"""
 
     def __init__(self,config):
-        super(DefaultHeaderProvider,self).__init__(config)
+        super(DefaultUserAgentHeaderProvider,self).__init__(config)
 
     def getHeaders(self):
         if USER_AGENT_HEADER in self.config and self.config[USER_AGENT_HEADER] is not None:
             return {"User-Agent" : self.config[USER_AGENT_HEADER]}
         else:
             return {'User-Agent': 'Mozilla/5.0'}
+
+
+
+class RandomUserAgentHeadersProvider(AbstractHeaderProvider):
+
+    def __init__(self,config):
+        super(RandomUserAgentHeadersProvider,self).__init__(config)
+
+    def getHeaders(self):
+        # TODO Implement random user agent
+        pass
+
+
