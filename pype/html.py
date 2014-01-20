@@ -12,7 +12,7 @@ logger = logging.getLogger("pype.html")
 
 """ Config constants for HtmlProcessor """
 FROM_TEXT = "fromtext"
-HTML_REQUEST_AGENT_HEADER = "html_request_agent_header"
+HEADERS_PROVIDER = "headers_provider"
 class HtmlProcessor(AbstractListProcessor):
 
     __config = None
@@ -35,7 +35,11 @@ class HtmlProcessor(AbstractListProcessor):
             else:
                 logger.debug("Request to "+ str(item.getValue()))
                 try:
-                    htmlBS = BeautifulSoup(requests.get(item.getValue(),headers=self.__getHeaders()).text)
+                    headers = self.__getHeaders()
+                    if headers is not None:
+                        htmlBS = BeautifulSoup(requests.get(item.getValue(),headers=headers).text)
+                    else:
+                        htmlBS = BeautifulSoup(request.get(item.getValue()).text)
                 except:
                     logger.error("Some errors requesting item value.Returning [] ")
                     traceback.print_exc()
@@ -52,13 +56,10 @@ class HtmlProcessor(AbstractListProcessor):
             return []
 
     def __getHeaders(self):
-            if HTML_REQUEST_AGENT_HEADER in self.__config:
-                logger.debug("Using configured useragent " + self.__config[HTML_REQUEST_AGENT_HEADER])
-                return {"User-Agent" : self.__config[HTML_REQUEST_AGENT_HEADER]}
-            else:
-                logger.debug("Using DEFAULT useragent")
-                return {'User-Agent': 'Mozilla/5.0'}
-
+        if HEADERS_PROVIDER in self.__config and self.__config[HEADERS_PROVIDER] is not None:
+            return self.__config[HEADERS_PROVIDER].getHeaders()
+        else:
+            return None
 """ BS Object processor
     using BeautifullSoup features to parse HTML and find elements
     Implemented FIND filter (set "find" in the metadata and a valid BS find expression)
@@ -133,3 +134,43 @@ class BSProcessor(HtmlProcessor):
             result = [item]
 
         return result
+
+
+
+class AbstractHeaderProvider:
+    """ Abstract header provider
+    """
+
+
+    config = {}
+
+    def __init__(self,config):
+        if config is not None:
+            self.config = config
+        else:
+            logger.warn("None config for header provider")
+
+    def getHeaders(self):
+        """ To be implemented by subclasses
+            Must return headers as a DICT
+
+            headers = { "header1":"valueheader1",...}
+
+        """
+        pass
+
+
+USER_AGENT_HEADER = "user_agent_header"
+
+class DefaultUserAgentHeaderProvider(AbstractHeaderProvider):
+    """ To be used by HtmlProcessor as default header provider with agent """
+    """ Config can contain a USER_AGENT_HEADER key with the user agent value for the User-Agent header"""
+
+    def __init__(self,config):
+        super(DefaultHeaderProvider,self).__init__(config)
+
+    def getHeaders(self):
+        if USER_AGENT_HEADER in self.config and self.config[USER_AGENT_HEADER] is not None:
+            return {"User-Agent" : self.config[USER_AGENT_HEADER]}
+        else:
+            return {'User-Agent': 'Mozilla/5.0'}
