@@ -15,10 +15,11 @@ FROM_TEXT = "fromtext"
 HEADERS_PROVIDER = "headers_provider"
 class HtmlProcessor(AbstractListProcessor):
 
-    __config = None
+    __config = {}
 
     def __init__(self,config):
-        self.__config = config
+        if config is not None:
+            self.__config = config
         ## TODO Validate config
 
 
@@ -39,7 +40,7 @@ class HtmlProcessor(AbstractListProcessor):
                     if headers is not None:
                         htmlBS = BeautifulSoup(requests.get(item.getValue(),headers=headers).text)
                     else:
-                        htmlBS = BeautifulSoup(request.get(item.getValue()).text)
+                        htmlBS = BeautifulSoup(requests.get(item.getValue()).text)
                 except:
                     logger.error("Some errors requesting item value.Returning [] ")
                     traceback.print_exc()
@@ -53,6 +54,7 @@ class HtmlProcessor(AbstractListProcessor):
 
         except:
             logger.error("Errors during html processing : ignoring")
+            traceback.print_exc()
             return []
 
     def __getHeaders(self):
@@ -128,7 +130,8 @@ class BSProcessor(HtmlProcessor):
 
                 else:
                     raise "Error : should provide something to GET"
-
+        elif "text" in self.__config:
+            result.append(BaseItem({"parent":item},bsObject.text))
         else:
             logger.warning("Nothing to process internally. Returning same item")
             result = [item]
@@ -184,6 +187,9 @@ class RandomUserAgentHeadersProvider(AbstractHeaderProvider):
 
     def getHeaders(self):
         # TODO Implement random user agent
+        #1. Obtain from "useragents.txt" file
+        #2. Obtain one from there
+
         pass
 
 
