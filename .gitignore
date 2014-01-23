@@ -38,3 +38,17 @@ nosetests.xml
 /pbrssspider.py
 /torrent_rssspider.py
 /hbrowse_spider.py
+/desudesu_rss_spider.py
+/doujinland_rss_spider.py
+/doujinmoe_rss_spider.py
+/doujinmoe_test.py
+/fakku_rss_spider.py
+/files.txt
+/fufufuunet_html_spider.py
+/hbrowse_test.py
+/hentaifromhell_rss_spider.py
+/htmlprocessor_sample.py
+/model_test.py
+/rarbg_rss_spider.py
+/sahadou_rss_spider.py
+/thelustyladyproject_html_ddl_spider.py
