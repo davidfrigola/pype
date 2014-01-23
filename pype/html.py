@@ -39,7 +39,7 @@ class HtmlProcessor(AbstractListProcessor):
                     if headers is not None:
                         htmlBS = BeautifulSoup(requests.get(item.getValue(),headers=headers).text)
                     else:
-                        htmlBS = BeautifulSoup(request.get(item.getValue()).text)
+                        htmlBS = BeautifulSoup(requests.get(item.getValue()).text)
                 except:
                     logger.error("Some errors requesting item value.Returning [] ")
                     traceback.print_exc()
