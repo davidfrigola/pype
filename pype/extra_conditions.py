@@ -25,8 +25,9 @@ class RegexCondition(AbstractCondition):
             return False
          #DBG
         logger.debug("Value to match : "+ self.__config["value"] + " in ["+str(item.getValue())+"]")
-        logger.debug(" match : " + str(self.__p.match(item.getValue())))
-        return not self.__p.match(item.getValue()) is None
+        result = self.__p.match(str(item.getValue()))
+        logger.debug(" match : " + str(result))
+        return not  result is None
 
     def __validateConfig(self,config):
         if config is None:
