@@ -6,6 +6,7 @@ import traceback
 import sys
 
 from core import *
+from file import *
 
 logger = logging.getLogger("pype.html")
 
@@ -164,7 +165,7 @@ class AbstractHeaderProvider:
 
 
 USER_AGENT_HEADER = "user_agent_header"
-
+USER_AGENT_HEADER_DEFAULT = "Pype UserAgent"
 class DefaultUserAgentHeaderProvider(AbstractHeaderProvider):
     """ To be used by HtmlProcessor as default header provider with agent """
     """ Config can contain a USER_AGENT_HEADER key with the user agent value for the User-Agent header"""
@@ -174,22 +175,63 @@ class DefaultUserAgentHeaderProvider(AbstractHeaderProvider):
 
     def getHeaders(self):
         if USER_AGENT_HEADER in self.config and self.config[USER_AGENT_HEADER] is not None:
-            return {"User-Agent" : self.config[USER_AGENT_HEADER]}
+            return FixHeaderProvider({FIX_HEADER:{"User-Agent" : self.config[USER_AGENT_HEADER]}}).getHeaders()
+            return
         else:
-            return {'User-Agent': 'Mozilla/5.0'}
+            return FixHeaderProvider({FIX_HEADER:{"User-Agent" : USER_AGENT_HEADER_DEFAULT}}).getHeaders()
 
 
-
-class RandomUserAgentHeadersProvider(AbstractHeaderProvider):
+RANDOM_USER_AGENT_FILE="random_user_agent_file"
+class RandomUserAgentHeaderProvider(AbstractHeaderProvider):
 
     def __init__(self,config):
-        super(RandomUserAgentHeadersProvider,self).__init__(config)
+        AbstractHeaderProvider.__init__(self,config)
 
     def getHeaders(self):
-        # TODO Implement random user agent
         #1. Obtain from "useragents.txt" file
-        #2. Obtain one from there
+        filename = "./useragents.txt"
+        if self.config is not None and RANDOM_USER_AGENT_FILE in self.config:
+            filename = self.config[RANDOM_USER_AGENT_FILE]
 
-        pass
+        useragents = FileProcessor({FILE_NAME:filename,FILE_OP:FILE_OP_RETRIEVE}).process(BaseItem(None,filename))
+
+        #2. Obtain one from the resulting list
+        from random import choice
+        return {"User-Agent":choice(useragents).getValue()}
+
+FIX_HEADER="fix_header"
+class FixHeaderProvider(AbstractHeaderProvider):
+    """
+    Configured FIX_HEADER as headers dict, returns the configured or empty if none found
+    """
+    def __init__(self,config):
+        AbstractHeaderProvider.__init__(self,config)
 
 
+    def getHeaders(self):
+
+        if(self.config is not None) and (FIX_HEADER in self.config):
+
+            return self.config[FIX_HEADER]
+        else:
+            logger.warn("No headers configured in "+FIX_HEADER+". Returning empty dictionary")
+            return {}
+
+HEADER_PROVIDERS_LIST = "header_providers_list"
+class MultipleHeaderProvider(AbstractHeaderProvider):
+
+    def __init__(self,config):
+        AbstractHeaderProvider.__init__(self,config)
+
+    def getHeaders(self):
+
+        if(self.config is not None) and (HEADER_PROVIDERS_LIST in self.config):
+            result = {}
+            # Iterate on configured header providers
+            for p in self.config[HEADER_PROVIDERS_LIST]:
+                result.update(p.getHeaders())
+
+            return result
+        else:
+            logger.warn("No "+HEADER_PROVIDERS_LIST+" configured. Returning empty headers dictionary")
+            return {}

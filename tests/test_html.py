@@ -31,3 +31,37 @@ def parse_html_error_test():
     result = processor.process(item)
 
     assert result == []
+
+def randomuseragentheaderprovider_ok_test():
+
+    provider = RandomUserAgentHeaderProvider({RANDOM_USER_AGENT_FILE:"./tests/resources/useragents.txt"})
+
+    result = provider.getHeaders()
+
+    assert result is not None
+
+def fixheaderprovider_noconfig_test():
+
+    provider = FixHeaderProvider(None)
+
+    result = provider.getHeaders()
+
+    assert len(result)==0
+
+def multiheadersprovider_ok_test():
+
+    provider = MultipleHeaderProvider({HEADER_PROVIDERS_LIST:[FixHeaderProvider({FIX_HEADER:{"h1":"vh1"}}),
+                                                            FixHeaderProvider({FIX_HEADER:{"h2":"vh2"}})]})
+
+    result = provider.getHeaders()
+
+    assert result is not None
+    assert len(result) == 2
+
+def multiheadersprovider_nolist_test():
+
+    provider = MultipleHeaderProvider(None)
+
+    result = provider.getHeaders()
+
+    assert len(result) == 0
