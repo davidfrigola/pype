@@ -99,7 +99,7 @@ class ParalelProcessor(AbstractListProcessor):
     def __init__(self,config):
         self.config = config
         if (not PROCESSORS_LIST in self.config) or (self.config[PROCESSORS_LIST] is None):
-            loggger.error("Bad configuration : need a processor list")
+            logger.error("Bad configuration : need a processor list")
             raise "Bad configuration : need a processors list"
 
 
@@ -197,7 +197,7 @@ class AbstractCondition:
 
     def evaluate(self,item):
         ## Not a real condition
-        return true
+        return True
 
 PROCESS_SLEEP_MIN = "sleepmin"
 PROCESS_SLEEP_MAX = "sleepmax"
