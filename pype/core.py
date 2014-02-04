@@ -16,7 +16,9 @@ class AbstractProcessor:
         """ The config object should contain all the configuration needed
 
         """
-        pass
+        if CONFIG_VALIDATOR in config and config[CONFIG_VALIDATOR] is not None:
+            if not config[CONFIG_VALIDATOR].validate(config):
+                raise "Config validation failed. See logs for validation violation details"
 
 
     def process(self,item):
@@ -44,3 +46,20 @@ class AbstractListProcessor(AbstractProcessor):
 
         return result
 
+
+CONFIG_VALIDATOR = "config_validator"
+class AbstractConfigValidator:
+
+    def __init__(self,validatorconfig):
+
+        pass
+
+    def validate(self,config):
+
+        pass
+
+
+class FakeConfigValidator(AbstractConfigValidator):
+
+    def validate(self,config):
+        return True
