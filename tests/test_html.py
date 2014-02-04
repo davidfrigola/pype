@@ -65,3 +65,19 @@ def multiheadersprovider_nolist_test():
     result = provider.getHeaders()
 
     assert len(result) == 0
+
+def defaultuseragentheaderprovider_ok_test():
+
+    provider = DefaultUserAgentHeaderProvider(None)
+
+    result = provider.getHeaders()
+
+    assert len(result)==1
+    assert "User-Agent" in result
+
+    provider = DefaultUserAgentHeaderProvider({USER_AGENT_HEADER:"testuseragent"})
+
+    result = provider.getHeaders()
+
+    assert len(result)==1
+    assert result["User-Agent"] == "testuseragent"

@@ -171,12 +171,11 @@ class DefaultUserAgentHeaderProvider(AbstractHeaderProvider):
     """ Config can contain a USER_AGENT_HEADER key with the user agent value for the User-Agent header"""
 
     def __init__(self,config):
-        super(DefaultUserAgentHeaderProvider,self).__init__(config)
+        AbstractHeaderProvider.__init__(self,config)
 
     def getHeaders(self):
         if USER_AGENT_HEADER in self.config and self.config[USER_AGENT_HEADER] is not None:
             return FixHeaderProvider({FIX_HEADER:{"User-Agent" : self.config[USER_AGENT_HEADER]}}).getHeaders()
-            return
         else:
             return FixHeaderProvider({FIX_HEADER:{"User-Agent" : USER_AGENT_HEADER_DEFAULT}}).getHeaders()
 
