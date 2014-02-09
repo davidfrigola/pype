@@ -16,22 +16,13 @@ FROM_TEXT = "fromtext"
 HEADERS_PROVIDER = "headers_provider"
 class HtmlProcessor(AbstractListProcessor):
 
-    __config = {}
-
-    def __init__(self,config):
-        if config is not None:
-            self.__config = config
-        ## TODO Validate config
-
-
-
 
     def process(self,item):
         """ Process a HTML item , retrieving whatever is in config
             - item should contain a valid web url
         """
         try:
-            if FROM_TEXT  in self.__config and self.__config[FROM_TEXT]:
+            if FROM_TEXT  in self.config and self.config[FROM_TEXT]:
                 logger.debug("Using text to obtain BS object")
                 htmlBS = BeautifulSoup(item.getValue())
             else:
@@ -49,7 +40,7 @@ class HtmlProcessor(AbstractListProcessor):
             bsHtmlItem = BaseItem({"parent":item})
             bsHtmlItem.setValue(htmlBS)
 
-            bsProcessor = BSProcessor(self.__config)
+            bsProcessor = BSProcessor(self.config)
 
             return bsProcessor.process(bsHtmlItem)
 
@@ -59,10 +50,17 @@ class HtmlProcessor(AbstractListProcessor):
             return []
 
     def __getHeaders(self):
-        if HEADERS_PROVIDER in self.__config and self.__config[HEADERS_PROVIDER] is not None:
-            return self.__config[HEADERS_PROVIDER].getHeaders()
+        if HEADERS_PROVIDER in self.config and self.config[HEADERS_PROVIDER] is not None:
+            return self.config[HEADERS_PROVIDER].getHeaders()
         else:
             return None
+
+
+    def validateConfig(self,config):
+
+        return config is not None
+
+
 """ BS Object processor
     using BeautifullSoup features to parse HTML and find elements
     Implemented FIND filter (set "find" in the metadata and a valid BS find expression)
