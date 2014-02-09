@@ -25,3 +25,26 @@ def containskeysconfigvalidator_ok_test():
     assert ContainsKeysConfigValidator({KEYS_LIST:["ok1","ok2"]}).validate({"ok1":True,"ok2":True})
 
     assert ContainsKeysConfigValidator({KEYS_LIST:["ok1"]}).validate({"ok1":True,"ok2":True})
+
+
+def containskeysconfigvalidator_ko_test():
+
+    assert not ContainsKeysConfigValidator({KEYS_LIST:["ok1","ok3"]}).validate({"ok1":True,"ok2":True})
+
+    assert not ContainsKeysConfigValidator({KEYS_LIST:["ok3"]}).validate({"ok1":True,"ok2":True})
+
+
+def containskeyinstanceofconfigvalidator_ok_test():
+
+    assert ContainsKeyAndInstanceConfigValidator({"list":type([])}).validate({"list":["item1","item2"]})
+
+def containskeyinstanceofconfigvalidator_ko_test():
+
+    assert not ContainsKeyAndInstanceConfigValidator({"list":type([])}).validate({"list":"item1","list2":"item2"})
+
+    assert not ContainsKeyAndInstanceConfigValidator({"list":type([])}).validate({"list1":"item1","list2":"item2"})
+
+
+
+
+
