@@ -1,5 +1,6 @@
 import logging
 from core import *
+from config_validator import *
 
 logger = logging.getLogger("pype.datasource")
 
@@ -104,3 +105,47 @@ class MongoDataSource(AbstractDataSource):
             result.append(item)
 
         return result
+
+
+
+#Issue #26
+
+
+
+import redis
+
+REDIS_DATASOURCE_CONFIG = "redis_datasource_config"
+REDIS_DATASOURCE_CONFIG_HOST = "redis_datasource_config_host"
+REDIS_DATASOURCE_CONFIG_PORT = "redis_datasource_config_port"
+class RedisDataSource(AbstractDataSource):
+
+    _r = None
+    def __init__(self,config):
+        #if self._validateConfig(config):
+        self._r = redis.StrictRedis(host=config[REDIS_DATASOURCE_CONFIG][REDIS_DATASOURCE_CONFIG_HOST],
+                                        port=config[REDIS_DATASOURCE_CONFIG][REDIS_DATASOURCE_CONFIG_PORT])
+        logger.debug("Obtained internal redis handler" + str(self._r))
+
+
+    def store(self,item):
+        self._r.set(item.getHash(), item.getValue())
+
+    def get(self,item):
+        return self._r.get(item.getHash())
+
+    def exists(self,item):
+        return self.get(item) is not None
+
+    def all(self):
+        raise "Not available for REDIS"
+
+    def _validateConfig(self,config):
+
+        validator = MultipleConfigValidator(
+                        {VALIDATORS_LIST:[ContainsKeyConfigValidator({KEYS_LIST:[REDIS_DATASOURCE_CONFIG]})]})
+        if not validator.validate(config):
+            raise "Config validation error"
+
+
+    def delete(self,item):
+        self._r.delete(item.getHash())
