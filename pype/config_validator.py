@@ -1,7 +1,6 @@
+from pype.core import AbstractConfigValidator, VALIDATORS_LIST,\
+    MultipleConfigValidator
 import logging
-
-from core import *
-from model import *
 
 logger = logging.getLogger("pype.config.validator")
 # Configuration validators

@@ -1,9 +1,10 @@
-from pype.core import *
 import sys, traceback
 #logging
 import logging
 from pype.config_validator import ContainsKeyConfigValidator, KEY_VALUE,\
     KEYS_LIST, ContainsKeysConfigValidator
+from pype.core import AbstractConfigValidator, AbstractProcessor,\
+    VALIDATORS_LIST, MultipleConfigValidator
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
 # Defition of a sample config validator

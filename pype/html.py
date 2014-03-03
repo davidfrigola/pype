@@ -7,6 +7,7 @@ import sys
 
 from core import *
 from file import *
+from pype.model import BaseItem
 
 logger = logging.getLogger("pype.html")
 

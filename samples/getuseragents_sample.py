@@ -1,3 +1,8 @@
+from pype.extra import ChainProcessor, PROCESSORS_LIST
+from pype.model import BaseItem
+from pype.file import FileProcessor, FILE_NAME, FILE_OP, FILE_OP_STORE
+from pype.html import HtmlProcessor,BSProcessor
+
 
 # Url with all user agents (HTML format)
 url="http://www.useragentstring.com/pages/All/"
@@ -10,20 +15,12 @@ url="http://www.useragentstring.com/pages/All/"
 # 5. Store in a file
 # This file is used in the RandomUserAgentHeadersProvider
 
-from pype.core import *
-from pype.html import *
-from pype.extra import *
-from pype.file import *
 #logging
 import logging
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
 
-from pype.html import *
 
-#logging
-import logging
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
 item = BaseItem(None,url)
 

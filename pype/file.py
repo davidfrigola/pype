@@ -1,8 +1,9 @@
-from core import *
 import os
 import urllib2
-import logging
 import datetime
+from pype.model import BaseItem
+import logging
+from pype.core import AbstractListProcessor
 
 logger = logging.getLogger("pype.file")
 
@@ -44,7 +45,7 @@ class FileDownloader(AbstractFileProcessor):
             raise "You must specify the metadata FLAG"
 
     def process(self,item,file_name=None):
-        file = None
+        filehandler = None
         downloadFileHandler = urllib2.urlopen(item.getValue())
         if file_name is None:
             file_name = item.getValue().split('/')[-1]
@@ -55,19 +56,19 @@ class FileDownloader(AbstractFileProcessor):
             os.makedirs(directory)
 
         # TODO use FILE_ADD_DATE to add date YYYYMMDDhhmm
-        logger.info("Downloading file to "+directory+file_name)
+        logger.info("Downloading filehandler to "+directory+file_name)
 
-        file = open(directory + file_name,'w')
-        file.write(downloadFileHandler.read())
-        file.close()
+        filehandler = open(directory + file_name,'w')
+        filehandler.write(downloadFileHandler.read())
+        filehandler.close()
         # Return result
         if self.__config[FILE_ADD_AS_METADATA]:
-            item.setMetadataValue(FILE_ADD_AS_METADATA_FIELD,file)
+            item.setMetadataValue(FILE_ADD_AS_METADATA_FIELD,filehandler)
             return[item]
         else:
             newFileItem = BaseItem(None)
             newFileItem.setParent(item)
-            newFileItem.setValue(file)
+            newFileItem.setValue(filehandler)
             return [newFileItem]
 
     def processList(self,items):

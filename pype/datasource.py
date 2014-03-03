@@ -1,7 +1,8 @@
+from pype.model import BaseItem
+from pype.core import VALIDATORS_LIST, MultipleConfigValidator
+from pype.config_validator import KEYS_LIST, ContainsKeysConfigValidator,\
+    ContainsKeyConfigValidator, KEY_VALUE
 import logging
-from core import *
-from config_validator import *
-from pype.config_validator import KEY_VALUE
 
 logger = logging.getLogger("pype.datasource")
 

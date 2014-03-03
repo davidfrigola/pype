@@ -1,7 +1,4 @@
 import logging
-
-from model import *
-
 logger = logging.getLogger("pype")
 
 class AbstractProcessor:

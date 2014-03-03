@@ -1,6 +1,8 @@
-from extra import *
-from extra_conditions import *
-from logging import *
+from pype.core import AbstractListProcessor, AbstractProcessor
+from pype.datasource import MongoDataSource
+from pype.extra_conditions import AlreadyProcessedCondition,\
+    ALREADY_PROCESSED_DATASOURCE
+import logging
 
 logger = logging.getLogger("pype.extra.processor")
 

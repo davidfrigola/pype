@@ -1,6 +1,8 @@
-from pype.core import *
-from pype.file import *
-from pype.extra_processor import *
+from pype.model import BaseItem
+from pype.file import FILE_NAME, FILE_OP, FILE_OP_STORE, FILE_OP_RETRIEVE,\
+    FileProcessor
+from pype.extra_processor import LogItemsProcessor
+
 
 items = []
 for i in range(1,20):

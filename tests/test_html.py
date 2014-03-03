@@ -1,4 +1,8 @@
-from pype.html import *
+from pype.model import BaseItem
+from pype.html import HtmlProcessor, FROM_TEXT, RandomUserAgentHeaderProvider,\
+    RANDOM_USER_AGENT_FILE, FixHeaderProvider, MultipleHeaderProvider,\
+    HEADER_PROVIDERS_LIST, FIX_HEADER, DefaultUserAgentHeaderProvider,\
+    USER_AGENT_HEADER
 
 
 def init_ok_test():

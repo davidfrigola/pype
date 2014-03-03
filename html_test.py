@@ -1,8 +1,11 @@
 
 # Example : http://bandaancha.eu/
-from pype.html import *
 
 import logging
+from pype.html import HtmlProcessor, BSProcessor
+from pype.model import BaseItem
+
+
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
 htmlprocessor = HtmlProcessor({"find":{"h2":{"class":"title"}}})
