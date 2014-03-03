@@ -1,5 +1,5 @@
-from pype.core import *
-from pype.html import *
+from pype.core import BaseItem
+from pype.html import HtmlProcessor
 
 #logging
 import logging
