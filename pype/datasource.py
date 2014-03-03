@@ -132,6 +132,9 @@ class RedisDataSource(AbstractDataSource):
             raise BaseException("Error validating config ")
 
 
+    def update(self,item):
+        self.store(item)
+
     def store(self,item):
         self._r.set(item.getHash(), item.getValue())
 

@@ -17,7 +17,7 @@ class AbstractProcessor:
 
         """
         if not self.validateConfig(config):
-            raise "Config validation error"
+            raise BaseException("Config validation error")
         else:
             self.config = config
 
