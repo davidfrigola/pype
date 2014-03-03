@@ -19,8 +19,10 @@ class ContainsKeyConfigValidator(AbstractConfigValidator):
 
 
     def validate(self,config):
-        return self.config[KEY_VALUE] in config
 
+        result =  self.config[KEY_VALUE] in config
+        logger.debug("Checking for " + self.config[KEY_VALUE] + " in " + str(config) + ":" + str(result))
+        return result
 
 KEYS_LIST = "keys_list"
 class ContainsKeysConfigValidator(AbstractConfigValidator):

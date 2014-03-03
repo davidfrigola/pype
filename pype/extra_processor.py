@@ -122,7 +122,7 @@ class ScriptProcessor(AbstractProcessor):
 #---------------------------------------------------------------------------
 ADDITEMS_PREPEND = "additems_prepend"
 ADDITEMS_POSTPEND = "additems_postpend"
-
+ADDITEMS_DATASOURCE = "additems_datasource"
 class AddItemsProcessor(AbstractListProcessor):
     """
         Add fixed items to the stream.
@@ -132,14 +132,15 @@ class AddItemsProcessor(AbstractListProcessor):
 
     __itemstoprepend = None
     __itemstopostpend = None
-
+    __datasoruce = None
     def __init__(self,config):
         self.__config = config
         if ADDITEMS_PREPEND in config:
             self.__itemstoprepend = config[ADDITEMS_PREPEND]
         if ADDITEMS_POSTPEND in config:
             self.__itemstopostpend = config[ADDITEMS_POSTPEND]
-
+        if ADDITEMS_DATASOURCE in config:
+            self.__datasoruce = config[ADDITEMS_DATASOURCE]
 
     def process(self,item):
         return self.__addItems([item])
@@ -157,6 +158,9 @@ class AddItemsProcessor(AbstractListProcessor):
         if self.__itemstopostpend is not None:
             logger.debug("Postpending items")
             result = result + self.__itemstopostpend
+
+        if self.__datasoruce is not None:
+            result = result + self.__datasource.all()
         return result
 
 

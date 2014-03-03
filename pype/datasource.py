@@ -1,6 +1,7 @@
 import logging
 from core import *
 from config_validator import *
+from pype.config_validator import KEY_VALUE
 
 logger = logging.getLogger("pype.datasource")
 
@@ -117,14 +118,18 @@ import redis
 REDIS_DATASOURCE_CONFIG = "redis_datasource_config"
 REDIS_DATASOURCE_CONFIG_HOST = "redis_datasource_config_host"
 REDIS_DATASOURCE_CONFIG_PORT = "redis_datasource_config_port"
+REDIS_DATASOURCE_CONFIG_DB = "redis_datasource_config_db"
 class RedisDataSource(AbstractDataSource):
 
     _r = None
     def __init__(self,config):
-        #if self._validateConfig(config):
-        self._r = redis.StrictRedis(host=config[REDIS_DATASOURCE_CONFIG][REDIS_DATASOURCE_CONFIG_HOST],
-                                        port=config[REDIS_DATASOURCE_CONFIG][REDIS_DATASOURCE_CONFIG_PORT])
-        logger.debug("Obtained internal redis handler" + str(self._r))
+        if self._validateConfig(config):
+            self._r = redis.StrictRedis(host=config[REDIS_DATASOURCE_CONFIG][REDIS_DATASOURCE_CONFIG_HOST],
+                                        port=config[REDIS_DATASOURCE_CONFIG][REDIS_DATASOURCE_CONFIG_PORT],
+                                        db=config[REDIS_DATASOURCE_CONFIG][REDIS_DATASOURCE_CONFIG_DB])
+            logger.debug("Obtained internal redis handler" + str(self._r))
+        else:
+            raise BaseException("Error validating config ")
 
 
     def store(self,item):
@@ -137,14 +142,35 @@ class RedisDataSource(AbstractDataSource):
         return self.get(item) is not None
 
     def all(self):
-        raise "Not available for REDIS"
+
+        result = []
+        # Obtain all keys
+        keys = self._r.keys()
+
+        #For each key, get value
+        for k in keys:
+            value = self._r.get(k)
+            result.append(BaseItem({"origin":"redis"},value))
+        #return result
+        return result
 
     def _validateConfig(self,config):
 
         validator = MultipleConfigValidator(
-                        {VALIDATORS_LIST:[ContainsKeyConfigValidator({KEYS_LIST:[REDIS_DATASOURCE_CONFIG]})]})
+                        {VALIDATORS_LIST:[ContainsKeyConfigValidator({KEY_VALUE:REDIS_DATASOURCE_CONFIG})]})
         if not validator.validate(config):
-            raise "Config validation error"
+            raise BaseException("Config validation error : does not contain " + REDIS_DATASOURCE_CONFIG)
+
+        # Validate redis datasource config
+        validator = MultipleConfigValidator(
+                        {VALIDATORS_LIST:[ContainsKeysConfigValidator({KEYS_LIST:[REDIS_DATASOURCE_CONFIG_DB,
+                                                                                  REDIS_DATASOURCE_CONFIG_HOST,
+                                                                                  REDIS_DATASOURCE_CONFIG_PORT]})]})
+
+        if not validator.validate(config[REDIS_DATASOURCE_CONFIG]):
+            raise BaseException("Config validation error : config not complete ")
+
+        return True
 
 
     def delete(self,item):
