@@ -1,13 +1,14 @@
 from bs4 import BeautifulSoup
 import requests
-import logging
+
 import traceback
 
-import sys
 
-from core import *
-from file import *
+
 from pype.model import BaseItem
+import logging
+from pype.core import AbstractListProcessor
+from pype.file import FILE_NAME, FileProcessor, FILE_OP, FILE_OP_RETRIEVE
 
 logger = logging.getLogger("pype.html")
 
@@ -107,7 +108,7 @@ class BSProcessor(HtmlProcessor):
             for findKey in findConfigDict:
 
                 if findConfigDict[findKey] is not None:
-                     foundElements = bsObject.find_all(findKey, findConfigDict[findKey])
+                    foundElements = bsObject.find_all(findKey, findConfigDict[findKey])
                 else:
                     foundElements = bsObject.findAll(findKey)
 

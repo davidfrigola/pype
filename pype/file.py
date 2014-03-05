@@ -45,7 +45,7 @@ class FileDownloader(AbstractFileProcessor):
             raise "You must specify the metadata FLAG"
 
     def process(self,item,file_name=None):
-        filehandler = None
+
         downloadFileHandler = urllib2.urlopen(item.getValue())
         if file_name is None:
             file_name = item.getValue().split('/')[-1]
@@ -152,7 +152,7 @@ class FileProcessor(AbstractFileProcessor):
 
         elif self.__config[FILE_OP]==FILE_OP_RETRIEVE:
             for item in items:
-               result = result + self.process(item)
+                result = result + self.process(item)
             pass
         else:
             raise "Unknown operation"
