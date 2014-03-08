@@ -1,4 +1,4 @@
-from pype.core import BaseItem
+from pype.model import BaseItem
 from pype.html import HtmlProcessor
 
 #logging
