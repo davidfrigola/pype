@@ -4,6 +4,8 @@ import datetime
 from pype.model import BaseItem
 import logging
 from pype.core import AbstractListProcessor
+from pype.config_validator import ContainsKeyAndInstanceConfigValidator
+from pype.datasource import RedisDataSource
 
 logger = logging.getLogger("pype.file")
 
@@ -158,3 +160,77 @@ class FileProcessor(AbstractFileProcessor):
             raise "Unknown operation"
 
         return result;
+
+
+REDIS_DATASOURCE = "redis_datasource"
+#REDIS_OP = "redisprocessor_operation"
+#REDIS_OP_STORE = "redisprocessor_operation_store"
+#REDIS_OP_RETRIEVE = "redisprocessor_operation_retrieve"
+
+REDIS_METADATA = "redis_metadata"
+class RedisStoreProcessor(AbstractListProcessor):
+
+    """ REDIS Processor : Using redis as storage
+    This processor stores all ITEM VALUES into REDIS (defined in datasource)
+     """
+
+    __datasource = None
+
+    def __init__(self,config):
+        if self.validateConfig(config):
+            self.__datasource = config[REDIS_DATASOURCE]
+
+
+    def process(self, item):
+        self.__datasource.store(item)
+        item.setMetadataValue(REDIS_METADATA,"stored")
+
+
+    def validateConfig(self, config):
+
+        if AbstractListProcessor.validateConfig(self, config):
+            # Validate processor config
+
+            # Contains datasource
+            return ContainsKeyAndInstanceConfigValidator({REDIS_DATASOURCE:type(RedisDataSource)})
+
+
+class RedisGetProcessor(AbstractListProcessor):
+    """ REDIS Processor : Using redis as origin for values
+        Items passed are ignored : just obtain all redis elements
+    """
+
+    __datasource = None
+
+    def __init__(self,config):
+        if self.validateConfig(config):
+            self.__datasource = config[REDIS_DATASOURCE]
+
+
+    def process(self, item):
+
+        return self.__obtainAllRedisElements()
+
+    def processList(self, items):
+
+        return self.__obtainAllRedisElements()
+
+    def __obtainAllRedisElements(self):
+
+        return self.__datasource.all()
+
+
+    def validateConfig(self, config):
+
+        if AbstractListProcessor.validateConfig(self, config):
+            # Validate processor config
+
+            # Contains datasource
+            return ContainsKeyAndInstanceConfigValidator({REDIS_DATASOURCE:type(RedisDataSource)})
+
+
+
+
+
+
+

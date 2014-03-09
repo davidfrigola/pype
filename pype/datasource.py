@@ -3,6 +3,8 @@ from pype.core import VALIDATORS_LIST, MultipleConfigValidator
 from pype.config_validator import KEYS_LIST, ContainsKeysConfigValidator,\
     ContainsKeyConfigValidator, KEY_VALUE
 import logging
+from redis.client import StrictRedis
+
 
 logger = logging.getLogger("pype.datasource")
 
@@ -114,7 +116,6 @@ class MongoDataSource(AbstractDataSource):
 
 
 
-import redis
 
 REDIS_DATASOURCE_CONFIG = "redis_datasource_config"
 REDIS_DATASOURCE_CONFIG_HOST = "redis_datasource_config_host"
@@ -125,7 +126,7 @@ class RedisDataSource(AbstractDataSource):
     _r = None
     def __init__(self,config):
         if self._validateConfig(config):
-            self._r = redis.StrictRedis(host=config[REDIS_DATASOURCE_CONFIG][REDIS_DATASOURCE_CONFIG_HOST],
+            self._r = StrictRedis(host=config[REDIS_DATASOURCE_CONFIG][REDIS_DATASOURCE_CONFIG_HOST],
                                         port=config[REDIS_DATASOURCE_CONFIG][REDIS_DATASOURCE_CONFIG_PORT],
                                         db=config[REDIS_DATASOURCE_CONFIG][REDIS_DATASOURCE_CONFIG_DB])
             logger.debug("Obtained internal redis handler" + str(self._r))

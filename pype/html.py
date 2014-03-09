@@ -8,7 +8,7 @@ import traceback
 from pype.model import BaseItem
 import logging
 from pype.core import AbstractListProcessor
-from pype.file import FILE_NAME, FileProcessor, FILE_OP, FILE_OP_RETRIEVE
+from pype.storage import FILE_NAME, FileProcessor, FILE_OP, FILE_OP_RETRIEVE
 
 logger = logging.getLogger("pype.html")
 
