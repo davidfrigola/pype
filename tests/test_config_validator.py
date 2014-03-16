@@ -1,6 +1,6 @@
-from pype.config_validator import *
-from mock import MagicMock
-from mock import patch
+from pype.config_validator import NoNoneConfigValidator,\
+    ContainsKeyConfigValidator, KEY_VALUE, KEYS_LIST,\
+    ContainsKeysConfigValidator, ContainsKeyAndInstanceConfigValidator
 
 
 def nononeconfigvalidator_ok_test():
