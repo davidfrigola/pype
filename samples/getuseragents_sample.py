@@ -1,6 +1,6 @@
 from pype.extra import ChainProcessor, PROCESSORS_LIST
 from pype.model import BaseItem
-from pype.file import FileProcessor, FILE_NAME, FILE_OP, FILE_OP_STORE
+from pype.storage import FileProcessor, FILE_NAME, FILE_OP, FILE_OP_STORE
 from pype.html import HtmlProcessor,BSProcessor
 
 
