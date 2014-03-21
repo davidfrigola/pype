@@ -23,12 +23,25 @@ FILE_NAME_NUMBER = "filenamenumber"
 
 FILE_ADD_DATE = "file_add_date"
 
+FILE_ADD_DATE_PREV_EXT = "file_add_date_prev_ext"
+
 class AbstractFileProcessor(AbstractListProcessor):
 
     def getDateForFilename(self):
         now = datetime.datetime.now()
         return now.strftime("%Y%m%d_%H%M%S")
 
+    def getFilenameWithDateTimePrevExtension(self,filename):
+
+        result = filename
+        #TODO
+        lastDot = filename.rfind('.')
+        if lastDot == 0:
+            result = filename + self.getDateForFilename()
+        else:
+            result = filename[:lastDot] + "_" +  self.getDateForFilename() + filename[lastDot:]
+
+        return result
 
 """ Downloads a file from a url """
 class FileDownloader(AbstractFileProcessor):
@@ -146,7 +159,12 @@ class FileProcessor(AbstractFileProcessor):
             #Open file and process all items
             filename = self.__config[FILE_NAME]
             if FILE_ADD_DATE in self.__config and self.__config[FILE_ADD_DATE]:
-                filename = filename + self.getDateForFilename()
+                if FILE_ADD_DATE_PREV_EXT not in self.__config:
+                    filename = filename + self.getDateForFilename()
+                else:
+                    # Issue #44
+                    filename = self.getFilenameWithDateTimePrevExtension(filename)
+
             self.__filehandler = open(filename,"a")
             for item in items:
                 result.extend(self.process(item))
@@ -160,6 +178,7 @@ class FileProcessor(AbstractFileProcessor):
             raise "Unknown operation"
 
         return result;
+
 
 
 REDIS_DATASOURCE = "redis_datasource"

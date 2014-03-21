@@ -27,3 +27,8 @@ print "File " + filename + " will be removed now"
 #Delete file
 import os
 os.remove(filename)
+
+
+# Checking #Issue_44
+filename = "file.sh"
+print "Filename : " + writeprocessor.getFilenameWithDateTimePrevExtension(filename)
