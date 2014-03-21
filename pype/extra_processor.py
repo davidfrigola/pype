@@ -1,8 +1,13 @@
-from extra import *
-from extra_conditions import *
-from logging import *
+from pype.core import AbstractListProcessor, AbstractProcessor
+from pype.datasource import MongoDataSource
+from pype.extra_conditions import AlreadyProcessedCondition,\
+    ALREADY_PROCESSED_DATASOURCE
+import logging
 
 logger = logging.getLogger("pype.extra.processor")
+
+
+#---------------------------------------------------------------------------
 """
 DRY Processor : do not repeat yourself processor
 
@@ -32,13 +37,14 @@ class DRYProcessor(AbstractListProcessor):
             logger.warn("Skipping already processed item "+str(item))
             return None
         else:
-           #Store item
-           self.__datasource.store(item)
-           logger.debug("Stored item - DRY processor "+str(item))
-           #Set stored flag
-           item.setMetadataValue(METADATA_DRY_FLAG,True)
-           return [item]
+            #Store item
+            self.__datasource.store(item)
+            logger.debug("Stored item - DRY processor "+str(item))
+            #Set stored flag
+            item.setMetadataValue(METADATA_DRY_FLAG,True)
+            return [item]
 
+#---------------------------------------------------------------------------
 
 """ Script processor
  Executes a script
@@ -51,11 +57,11 @@ SCRIPT_EXEC_MODE = "executescriptmode"
 SCRIPT_EXEC_ONCE = "executescriptonce"
 SCRIPT_EXEC_PERITEM = "executescriptperitem"
 SCRIPT_EXEC_COMMAND = "executescritpcommand"
-SCRIPT_EXEC_COMMAND_VALUE = "executescritpcommandvalue"
 SCRIPT_EXEC_ITEMVALUEASCOMMAND = "exectuescriptitemvalueascommand"
-SCRIPT_EXEC_OS = "executescriptos"
-SCRIPT_EXEC_OS_NIX = "executescriptosnix"
-SCRIPT_EXEC_OS_WIN = "executescriptoswin"
+
+#SCRIPT_EXEC_OS = "executescriptos"
+#SCRIPT_EXEC_OS_NIX = "executescriptosnix"
+#SCRIPT_EXEC_OS_WIN = "executescriptoswin"
 
 #SCRIPT_EXEC_COMMAND_PARAM_ITEM_VALUE = "executescriptcommandparamitemvalue"
 class ScriptProcessor(AbstractProcessor):
@@ -69,6 +75,8 @@ class ScriptProcessor(AbstractProcessor):
         ##TODO Validate config
         if not SCRIPT_EXEC_MODE in config:
             raise "ScriptProcessor requires execution mode set in config"
+        else:
+            self.__mode = config[SCRIPT_EXEC_MODE]
 
 
     def process(self,item):
@@ -77,33 +85,46 @@ class ScriptProcessor(AbstractProcessor):
             self.__executescript(item)
 
         else:
-            return [item]
+            self.__executescript(None)
+
+        return [item]
 
     def processList(self,items):
         """ Process a list of items """
         if self.__mode == SCRIPT_EXEC_ONCE:
             self.__executescript(None)
         else:
-            return super(ScriptProcessor,self).processList(items)
+            result = []
+            for item in items:
+
+                result = result + self.process(item)
 
 
 
 
     def __executescript(self,item):
-        ## TODO
+
         #see http://www.cyberciti.biz/faq/python-execute-unix-linux-command-examples/
         #see http://stackoverflow.com/questions/14894993/running-windows-shell-commands-with-python
         # os or subprocess??s
+        if SCRIPT_EXEC_ITEMVALUEASCOMMAND in self.__config and self.__config[SCRIPT_EXEC_ITEMVALUEASCOMMAND]:
 
-        logger.info("Executing script " + str(self.__config[SCRIPT_EXEC_COMMAND]) + "for item " + str(item))
+            scriptcommand = item.getValue()
+        else:
+            scriptcommand = self.__config[SCRIPT_EXEC_COMMAND]
 
-        # execute script with item value as parameter
-        # just ignore the last parameter in the script
-        pass
 
+        logger.info("Executing script " + str(scriptcommand) + "for item " + str(item))
+        import os
+
+        os.system(scriptcommand)
+
+
+
+#---------------------------------------------------------------------------
 ADDITEMS_PREPEND = "additems_prepend"
 ADDITEMS_POSTPEND = "additems_postpend"
-
+ADDITEMS_DATASOURCE = "additems_datasource"
 class AddItemsProcessor(AbstractListProcessor):
     """
         Add fixed items to the stream.
@@ -113,14 +134,15 @@ class AddItemsProcessor(AbstractListProcessor):
 
     __itemstoprepend = None
     __itemstopostpend = None
-
+    __datasoruce = None
     def __init__(self,config):
         self.__config = config
         if ADDITEMS_PREPEND in config:
             self.__itemstoprepend = config[ADDITEMS_PREPEND]
         if ADDITEMS_POSTPEND in config:
             self.__itemstopostpend = config[ADDITEMS_POSTPEND]
-
+        if ADDITEMS_DATASOURCE in config:
+            self.__datasoruce = config[ADDITEMS_DATASOURCE]
 
     def process(self,item):
         return self.__addItems([item])
@@ -138,6 +160,9 @@ class AddItemsProcessor(AbstractListProcessor):
         if self.__itemstopostpend is not None:
             logger.debug("Postpending items")
             result = result + self.__itemstopostpend
+
+        if self.__datasoruce is not None:
+            result = result + self.__datasource.all()
         return result
 
 

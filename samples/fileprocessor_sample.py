@@ -1,6 +1,8 @@
-from pype.core import *
-from pype.file import *
-from pype.extra_processor import *
+from pype.model import BaseItem
+from pype.storage import FILE_NAME, FILE_OP, FILE_OP_STORE, FILE_OP_RETRIEVE,\
+    FileProcessor
+from pype.extra_processor import LogItemsProcessor
+
 
 items = []
 for i in range(1,20):
@@ -25,3 +27,8 @@ print "File " + filename + " will be removed now"
 #Delete file
 import os
 os.remove(filename)
+
+
+# Checking #Issue_44
+filename = "file.sh"
+print "Filename with timestamp before extension: " + writeprocessor.getFilenameWithDateTimePrevExtension(filename)

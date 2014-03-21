@@ -1,8 +1,11 @@
-from core import *
 import os
 import urllib2
-import logging
 import datetime
+from pype.model import BaseItem
+import logging
+from pype.core import AbstractListProcessor
+from pype.config_validator import ContainsKeyAndInstanceConfigValidator
+from pype.datasource import RedisDataSource
 
 logger = logging.getLogger("pype.file")
 
@@ -20,12 +23,25 @@ FILE_NAME_NUMBER = "filenamenumber"
 
 FILE_ADD_DATE = "file_add_date"
 
+FILE_ADD_DATE_PREV_EXT = "file_add_date_prev_ext"
+
 class AbstractFileProcessor(AbstractListProcessor):
 
     def getDateForFilename(self):
         now = datetime.datetime.now()
         return now.strftime("%Y%m%d_%H%M%S")
 
+    def getFilenameWithDateTimePrevExtension(self,filename):
+
+        result = filename
+        #TODO
+        lastDot = filename.rfind('.')
+        if lastDot == 0:
+            result = filename + self.getDateForFilename()
+        else:
+            result = filename[:lastDot] + "_" +  self.getDateForFilename() + filename[lastDot:]
+
+        return result
 
 """ Downloads a file from a url """
 class FileDownloader(AbstractFileProcessor):
@@ -44,7 +60,7 @@ class FileDownloader(AbstractFileProcessor):
             raise "You must specify the metadata FLAG"
 
     def process(self,item,file_name=None):
-        file = None
+
         downloadFileHandler = urllib2.urlopen(item.getValue())
         if file_name is None:
             file_name = item.getValue().split('/')[-1]
@@ -55,19 +71,19 @@ class FileDownloader(AbstractFileProcessor):
             os.makedirs(directory)
 
         # TODO use FILE_ADD_DATE to add date YYYYMMDDhhmm
-        logger.info("Downloading file to "+directory+file_name)
+        logger.info("Downloading filehandler to "+directory+file_name)
 
-        file = open(directory + file_name,'w')
-        file.write(downloadFileHandler.read())
-        file.close()
+        filehandler = open(directory + file_name,'w')
+        filehandler.write(downloadFileHandler.read())
+        filehandler.close()
         # Return result
         if self.__config[FILE_ADD_AS_METADATA]:
-            item.setMetadataValue(FILE_ADD_AS_METADATA_FIELD,file)
+            item.setMetadataValue(FILE_ADD_AS_METADATA_FIELD,filehandler)
             return[item]
         else:
             newFileItem = BaseItem(None)
             newFileItem.setParent(item)
-            newFileItem.setValue(file)
+            newFileItem.setValue(filehandler)
             return [newFileItem]
 
     def processList(self,items):
@@ -143,7 +159,12 @@ class FileProcessor(AbstractFileProcessor):
             #Open file and process all items
             filename = self.__config[FILE_NAME]
             if FILE_ADD_DATE in self.__config and self.__config[FILE_ADD_DATE]:
-                filename = filename + self.getDateForFilename()
+                if FILE_ADD_DATE_PREV_EXT not in self.__config:
+                    filename = filename + self.getDateForFilename()
+                else:
+                    # Issue #44
+                    filename = self.getFilenameWithDateTimePrevExtension(filename)
+
             self.__filehandler = open(filename,"a")
             for item in items:
                 result.extend(self.process(item))
@@ -151,9 +172,84 @@ class FileProcessor(AbstractFileProcessor):
 
         elif self.__config[FILE_OP]==FILE_OP_RETRIEVE:
             for item in items:
-               result = result + self.process(item)
+                result = result + self.process(item)
             pass
         else:
             raise "Unknown operation"
 
         return result;
+
+
+
+REDIS_DATASOURCE = "redis_datasource"
+#REDIS_OP = "redisprocessor_operation"
+#REDIS_OP_STORE = "redisprocessor_operation_store"
+#REDIS_OP_RETRIEVE = "redisprocessor_operation_retrieve"
+
+REDIS_METADATA = "redis_metadata"
+class RedisStoreProcessor(AbstractListProcessor):
+
+    """ REDIS Processor : Using redis as storage
+    This processor stores all ITEM VALUES into REDIS (defined in datasource)
+     """
+
+    __datasource = None
+
+    def __init__(self,config):
+        if self.validateConfig(config):
+            self.__datasource = config[REDIS_DATASOURCE]
+
+
+    def process(self, item):
+        self.__datasource.store(item)
+        item.setMetadataValue(REDIS_METADATA,"stored")
+
+
+    def validateConfig(self, config):
+
+        if AbstractListProcessor.validateConfig(self, config):
+            # Validate processor config
+
+            # Contains datasource
+            return ContainsKeyAndInstanceConfigValidator({REDIS_DATASOURCE:type(RedisDataSource)})
+
+
+class RedisGetProcessor(AbstractListProcessor):
+    """ REDIS Processor : Using redis as origin for values
+        Items passed are ignored : just obtain all redis elements
+    """
+
+    __datasource = None
+
+    def __init__(self,config):
+        if self.validateConfig(config):
+            self.__datasource = config[REDIS_DATASOURCE]
+
+
+    def process(self, item):
+
+        return self.__obtainAllRedisElements()
+
+    def processList(self, items):
+
+        return self.__obtainAllRedisElements()
+
+    def __obtainAllRedisElements(self):
+
+        return self.__datasource.all()
+
+
+    def validateConfig(self, config):
+
+        if AbstractListProcessor.validateConfig(self, config):
+            # Validate processor config
+
+            # Contains datasource
+            return ContainsKeyAndInstanceConfigValidator({REDIS_DATASOURCE:type(RedisDataSource)})
+
+
+
+
+
+
+

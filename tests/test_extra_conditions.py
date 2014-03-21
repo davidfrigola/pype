@@ -1,19 +1,21 @@
 
-from pype.extra_conditions import *
-from mock import MagicMock
-from mock import patch
+#from mock import MagicMock
+#from mock import patch
+from pype.extra_conditions import RegexCondition, ContainsTextCondition,\
+    AlreadyProcessedCondition
+from pype.model import BaseItem
 
 
 """ RegexCondition tests """
 def init_ok_RegexCondition_test():
 
-    condition = RegexCondition({"value":".*"})
+    RegexCondition({"value":".*"})
 
 
 def init_fail_RegexCondition_test():
 
     try:
-        condition = RegexCondition({"value-no":".*"})
+        RegexCondition({"value-no":".*"})
     except:
         pass
 

@@ -1,0 +1,22 @@
+
+# Samples
+
+Code samples for some of pype's features
+
+#additemsprocessor_sample
+
+#configvalidation_sample
+
+#fileprocessor_sample
+
+#getuseragents_sample
+
+#datasource_sample
+
+Samples of datasources usage.
+
+* Redis datasource simple use case : retrieve an unexisting item, store an item and retrieve it, then delete.
+
+#logprocessor_sample
+
+#scriptprocessor_sample

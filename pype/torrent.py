@@ -1,7 +1,8 @@
 import logging
 import sys
 
-from core import *
+from pype.model import BaseItem
+from pype.core import AbstractListProcessor
 
 logger = logging.getLogger("pype.torrent")
 
@@ -72,3 +73,73 @@ class TransmissionAddTorrentProcessor(AbstractListProcessor):
     def __checkConfiguration(self,config):
         ## TODO Must be implemented (Issue #4)
         return (not config is None) and (TRANSMISSION_IP in config) and (TRANSMISSION_PORT in config) and (TRANSMISSION_USER in config) and (TRANSMISSION_PASSWORD in config)
+
+
+
+
+class TransmissionClientConfig():
+    """ Item value for TransmissionChangeStatusProcessor"""
+    def __init__(self,host,port,user,password):
+        self.host = host
+        self.port = port
+        self.user = user
+        self.password = password
+
+
+
+TRANSMISSION_CLIENT_CONFIG = "transmission_client_config"
+TRANSMISSION_TORRENT_CURRENT_STATUS = "transmission_torrent_current_status"
+# Valid status
+# stopped, downloading
+TRANSMISSION_TORRENT_OPERATION = "transmission_torrent_operation"
+TRANSMISSION_TORRENT_OPERATION_START = "transmission_torrent_operation_start"
+TRANSMISSION_TORRENT_OPERATION_STOP = "transmission_torrent_operation_stop"
+
+class TransmissionChangeStatusProcessor(AbstractListProcessor):
+
+    __config = None
+
+    def __init__(self,config):
+
+        if self.validateConfig(config):
+            self.__config = config
+
+
+    def process(self,item):
+
+        result = []
+        logger.debug(" Item value type : " + str(type(item.getValue())))
+        if type(item.getValue())==type(TransmissionClientConfig(None,None,None,None)):
+            clientConfig = item.getValue()
+            tclient = transmissionrpc.Client(clientConfig.host,clientConfig.port,clientConfig.user,clientConfig.password)
+
+            torrents = tclient.get_torrents()
+            for t in torrents:
+                self.__changeTorrentStatus(tclient,t)
+                result.append(BaseItem({"torrent-transmission":True},t))
+
+        else:
+            logger.warning("Unknown item value type " + str(type(item.getValue())))
+
+        return result
+    def validateConfig(self, config):
+        return True
+
+
+    def __changeTorrentStatus(self,tclient,torrent):
+        """ Change torrent status as states configuration """
+        logger.debug("Torrent " + str(torrent.status) + " - " +str(torrent.name))
+        if torrent.status == self.__config[TRANSMISSION_TORRENT_CURRENT_STATUS]:
+            logger.info("Torrent " + str(torrent.id) + " is in status " + str(torrent.status))
+
+            # Do operation
+            operation = self.__config[TRANSMISSION_TORRENT_OPERATION]
+            if  operation == TRANSMISSION_TORRENT_OPERATION_START:
+                logger.info("Starting torrent " + str(torrent.name))
+                tclient.start_torrent(torrent.id,bypass_queue='true')
+            elif operation == TRANSMISSION_TORRENT_OPERATION_STOP:
+                logger.info("Stopping torrent " + str(torrent.name))
+                tclient.stop_torrent(torrent.id)
+            else:
+                logger.warning("Unknown operation" + str(operation))
+        pass

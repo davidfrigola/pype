@@ -1,5 +1,6 @@
-from pype.extra_processor import *
-from pype.core import *
+from pype.model import BaseItem
+from pype.extra_processor import AddItemsProcessor, ADDITEMS_PREPEND,\
+    ADDITEMS_POSTPEND
 
 item1 = BaseItem(None,"item1")
 item2 = BaseItem(None,"item2")

@@ -1,5 +1,5 @@
-from pype.core import *
-from pype.html import *
+from pype.model import BaseItem
+from pype.html import HtmlProcessor
 
 #logging
 import logging
@@ -7,7 +7,7 @@ logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
 item = BaseItem(None,"https://github.com")
 
-htmlprocessor = HtmlProcessor({HTML_REQUEST_AGENT_HEADER:"Some user-agent"})
+htmlprocessor = HtmlProcessor({})
 
 result = htmlprocessor.process(item)
 

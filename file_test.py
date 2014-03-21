@@ -1,4 +1,4 @@
-from pype.file import *
+from pype.storage import *
 
 item = BaseItem(None)
 item.setValue("https://code.google.com/intl/es/images/gd-logo.png")
