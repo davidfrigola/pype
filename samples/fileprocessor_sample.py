@@ -31,4 +31,4 @@ os.remove(filename)
 
 # Checking #Issue_44
 filename = "file.sh"
-print "Filename : " + writeprocessor.getFilenameWithDateTimePrevExtension(filename)
+print "Filename with timestamp before extension: " + writeprocessor.getFilenameWithDateTimePrevExtension(filename)

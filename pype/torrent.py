@@ -1,8 +1,8 @@
 import logging
 import sys
 
-from core import *
 from pype.model import BaseItem
+from pype.core import AbstractListProcessor
 
 logger = logging.getLogger("pype.torrent")
 
