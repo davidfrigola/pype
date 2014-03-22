@@ -1,7 +1,7 @@
 pype
 ====
 
-Python pipe
+Python Processing Engine
 
 Travis-CI
 <a href="https://travis-ci.org/davidfrigola/pype/" target="_blank">
