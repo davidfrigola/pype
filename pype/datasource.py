@@ -39,6 +39,8 @@ import datetime
 MONGO_DATASOURCE_CONFIG = "mongodatasourceconfig"
 MONGO_DATABASE = "database"
 MONGO_COLLECTION = "collection"
+MONGO_HOST = "mongohost"
+MONGO_PORT = "mongoport"
 
 class MongoDataSource(AbstractDataSource):
 
@@ -64,11 +66,12 @@ class MongoDataSource(AbstractDataSource):
             self.__mongoDatabaseName=config[MONGO_DATASOURCE_CONFIG][MONGO_DATABASE]
             self.__mongoCollectionName = config[MONGO_DATASOURCE_CONFIG][MONGO_COLLECTION]
             ## TODO get mongoClient based on config with user/pass
-            self.__mongoClient = MongoClient()
+
+            self.__mongoClient = self.__getMongoClient(config)
 
         else:
             logger.info("Created mongo client without config params (default)")
-            self.__mongoClient = MongoClient()
+            self.__mongoClient = self.__getMongoClient(self,config)
 
         ## Obtain collection
         self.__collection = self.__mongoClient[self.__mongoDatabaseName][self.__mongoCollectionName]
@@ -110,7 +113,22 @@ class MongoDataSource(AbstractDataSource):
 
         return result
 
+    def __getMongoClient(self,config):
 
+        result = None
+        if config is None or config == {}:
+            # Use defaults
+            result = MongoClient()
+        elif (MONGO_HOST in config and MONGO_PORT in config):
+            logger.debug("Creating mongoclient with host "+str(config[MONGO_HOST]) +" and port " + str(config[MONGO_PORT]))
+            result = MongoClient(config[MONGO_HOST],config[MONGO_PORT])
+        else:
+            result = MongoClient()
+
+        if result is None:
+            raise "MongoClient is none!"
+
+        return result
 
 #Issue #26
 
