@@ -27,7 +27,7 @@ for e in result:
     else:
         print str(e.getValue()) +" <<<<< " +  str(e.getMetadataValue("parent").getValue())
 
-chainSleep = ChainProcessor({PROCESSORS_LIST:[SleepProcessor({PROCESS_SLEEP_MIN:1,PROCESS_SLEEP_MAX:10,PROCESS_SLEEP_RND:True}),htmlprocessor]})
+chainSleep = ChainProcessor({PROCESSORS_LIST:[WaitProcessor({PROCESS_WAIT_MIN:1,PROCESS_WAIT_MAX:10,PROCESS_WAIT_RND:True}),htmlprocessor]})
 
 result = chainSleep.processList(result)
 

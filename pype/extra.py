@@ -199,15 +199,15 @@ class AbstractCondition:
         ## Not a real condition
         return True
 
-PROCESS_SLEEP_MIN = "sleepmin"
-PROCESS_SLEEP_MAX = "sleepmax"
-PROCESS_SLEEP_RND = "sleeprandom"
+PROCESS_WAIT_MIN = "process_wait_min"
+PROCESS_WAIT_MAX = "process_wait_max"
+PROCESS_WAIT_RND = "process_wait_random"
 """ Sleeps a random amount of time (seconds) for each item processed
     Uses sleepmin and sleepmax for the amount of time to sleep.
-    Randomly, for each
+    Randomly, for each (if not random, fix to sleep min)
     And does just it, returning the same element.
 """
-class SleepProcessor(AbstractListProcessor):
+class WaitProcessor(AbstractListProcessor):
 
     __time_min = 0
     __time_max = 0
@@ -216,9 +216,9 @@ class SleepProcessor(AbstractListProcessor):
 
     def __init__(self,config):
         self.config = config
-        self.__time_min = config[PROCESS_SLEEP_MIN]
-        self.__time_max = config[PROCESS_SLEEP_MAX]
-        self.__time_random = config[PROCESS_SLEEP_RND]
+        self.__time_min = config[PROCESS_WAIT_MIN]
+        self.__time_max = config[PROCESS_WAIT_MAX]
+        self.__time_random = config[PROCESS_WAIT_RND]
 
 
     def process(self,item):
