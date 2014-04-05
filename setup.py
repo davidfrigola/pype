@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pype',
-    version='0.4',
+    version='0.3.1',
     description='PYPE',
     author='davidfrigola',
     author_email='daviz@mailinator.com',
