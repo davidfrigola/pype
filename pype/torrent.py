@@ -19,7 +19,7 @@ TRANSMISSION_PORT = "transmissionport"
 TRANSMISSION_USER = "transmissionuser"
 TRANSMISSION_PASSWORD = "transmissionpassword"
 
-
+TRANSMISSION_SUBFOLDER = "transmission_subfolder" #Issue 54
 
 """ Transmission Add Magnet Link Processor
 
@@ -48,7 +48,10 @@ class TransmissionAddTorrentProcessor(AbstractListProcessor):
 
         try:
             logger.info("Adding torrent "+str(item.getValue()))
-            torrent_add_result = self.__tclient.add_torrent(item.getValue())
+            if (TRANSMISSION_SUBFOLDER in self.__config):
+                torrent_add_result = self.__tclient.add_torrent(item.getValue(),download_dir=self.__config[TRANSMISSION_SUBFOLDER])
+            else:
+                torrent_add_result = self.__tclient.add_torrent(item.getValue())
             logger.info("Result : " + str(torrent_add_result))
             return  [item]
         except:
