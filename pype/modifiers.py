@@ -1,6 +1,6 @@
-from pype.core import *
 from pype.extra import AbstractModifier
 import logging
+from pype.model import BaseItem
 
 logger = logging.getLogger("pype.modifiers")
 

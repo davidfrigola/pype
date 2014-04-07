@@ -1,9 +1,10 @@
 import feedparser
 import logging
+from pype.model import BaseItem
+from pype.core import AbstractListProcessor
 
 logger = logging.getLogger("pype.rss")
 
-from core import *
 
 
 
