@@ -9,6 +9,8 @@ Travis-CI
 </a>
 Version : Milestone 0.4
 
+[![Stories in Ready](https://badge.waffle.io/davidfrigola/pype.png?label=ready&title=Ready)](http://waffle.io/davidfrigola/pype)
+
 Abstract
 ========
 
