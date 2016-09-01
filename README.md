@@ -2,9 +2,8 @@ pype
 ====
 
 Python Processing Engine
-
-Travis-CI
 Version : Milestone 0.4
+
 
 <a href="https://travis-ci.org/davidfrigola/pype/" target="_blank">
 <img src="https://travis-ci.org/davidfrigola/pype.png" data-bindattr-28="28" title="Build Status Images">
